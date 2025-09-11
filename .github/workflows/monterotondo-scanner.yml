@@ -1,0 +1,142 @@
+# .github/workflows/monterotondo-scanner.yml
+name: 🚀 Monterotondo Albo Pretorio Scanner
+
+on:
+  workflow_dispatch:
+    inputs:
+      key_start:
+        description: 'KEY start (default: 56500)'
+        default: '56500'
+        required: false
+      key_end:
+        description: 'KEY end (default: 56688)'
+        default: '56688'
+        required: false
+      concurrency:
+        description: 'Max concurrent requests (default: 50)'
+        default: '50'
+        required: false
+      timeout:
+        description: 'Request timeout in seconds (default: 3)'
+        default: '3'
+        required: false
+  
+  # Optional: schedule for automatic scans
+  schedule:
+    - cron: '0 8 * * 1'  # Every Monday at 8 AM UTC
+
+jobs:
+  scan-albo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+        
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install aiohttp
+        
+    - name: 🚀 Run Ultra-Fast Scanner
+      id: scan
+      run: |
+        echo "Starting Monterotondo scan..."
+        python scanner_async.py \
+          --key-start ${{ github.event.inputs.key_start || '56500' }} \
+          --key-end ${{ github.event.inputs.key_end || '56688' }} \
+          --concurrency ${{ github.event.inputs.concurrency || '50' }} \
+          --timeout ${{ github.event.inputs.timeout || '3' }}
+        
+        echo "Scan completed!"
+        
+        # Get scan results for summary
+        if [ -f monterotondo_scan_*.json ]; then
+          RESULT_FILE=$(ls monterotondo_scan_*.json | head -1)
+          DOCS_FOUND=$(python -c "import json; data=json.load(open('$RESULT_FILE')); print(data['scan_metadata']['statistics']['documents_found'])")
+          SUCCESS_RATE=$(python -c "import json; data=json.load(open('$RESULT_FILE')); print(f\"{data['scan_metadata']['statistics']['success_rate']:.1f}\")")
+          echo "docs_found=$DOCS_FOUND" >> $GITHUB_OUTPUT
+          echo "success_rate=$SUCCESS_RATE" >> $GITHUB_OUTPUT
+          echo "result_file=$RESULT_FILE" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: 📊 Generate Summary
+      run: |
+        cat >> $GITHUB_STEP_SUMMARY << EOF
+        # 🚀 Monterotondo Scan Results
+        
+        ## 📈 Scan Statistics
+        - **Range**: KEY ${{ github.event.inputs.key_start || '56500' }} → ${{ github.event.inputs.key_end || '56688' }}
+        - **Concurrency**: ${{ github.event.inputs.concurrency || '50' }} requests
+        - **Documents Found**: ${{ steps.scan.outputs.docs_found || 'N/A' }}
+        - **Success Rate**: ${{ steps.scan.outputs.success_rate || 'N/A' }}%
+        
+        ## ⚡ Performance
+        - **Execution Time**: ${{ job.steps.scan.conclusion == 'success' && 'Completed successfully' || 'Failed' }}
+        - **Environment**: GitHub Actions (Ubuntu Latest)
+        
+        ## 📄 Results
+        The complete dataset has been saved as an artifact and is available for download.
+        
+        ---
+        *Scan completed at $(date)*
+        EOF
+        
+    - name: 📤 Upload scan results
+      uses: actions/upload-artifact@v4
+      with:
+        name: monterotondo-scan-results-${{ github.run_number }}
+        path: |
+          monterotondo_scan_*.json
+          monterotondo_scan.log
+        retention-days: 30
+        
+    - name: 🏷️ Create Release (if successful)
+      if: success() && steps.scan.outputs.docs_found
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: scan-${{ github.run_number }}
+        name: 📊 Scan Results - Run #${{ github.run_number }}
+        body: |
+          # 🚀 Monterotondo Albo Pretorio Scan Results
+          
+          ## 📊 Summary
+          - **Documents Found**: ${{ steps.scan.outputs.docs_found }}
+          - **Success Rate**: ${{ steps.scan.outputs.success_rate }}%
+          - **KEY Range**: ${{ github.event.inputs.key_start || '56500' }} → ${{ github.event.inputs.key_end || '56688' }}
+          - **Concurrency**: ${{ github.event.inputs.concurrency || '50' }} requests
+          - **Scan Date**: ${{ github.event.head_commit.timestamp }}
+          
+          ## 📥 Download
+          Download the complete dataset from the attached files:
+          - `monterotondo_scan_*.json` - Complete scan results with metadata
+          - `monterotondo_scan.log` - Detailed execution log
+          
+          ## 🔍 Quick Stats
+          This scan used ultra-fast async processing with smart PARAM prediction
+          to efficiently discover documents in the Monterotondo Albo Pretorio.
+          
+          ---
+          *Automated scan via GitHub Actions*
+        files: |
+          monterotondo_scan_*.json
+          monterotondo_scan.log
+        draft: false
+        prerelease: false
+        
+    - name: 📧 Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Scan failed! Check the logs for details."
+        echo "This could be due to:"
+        echo "  - Network connectivity issues"
+        echo "  - Server rate limiting"
+        echo "  - Invalid KEY range"
+        exit 1
