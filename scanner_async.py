@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-MONTEROTONDO ALBO PRETORIO - SCANNER ASINCRONO ULTRA-VELOCE
-GitHub/VPS optimized version with massive parallelization
-Target: 188 documents in 30-60 seconds
+DISCOVERY SCANNER SEQUENZIALE PURO
+Basato sui parametri di ieri sera: PARAM 50416 + KEY 56609
+Segue la logica sequenziale: PARAM crescenti + KEY consecutivi per ogni PARAM
 """
 
 import asyncio
@@ -11,308 +11,357 @@ import time
 import json
 import argparse
 from datetime import datetime
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
 import logging
 import sys
 
-class MonterotondoAsyncScanner:
-    """Ultra-fast async scanner for Monterotondo Albo Pretorio"""
+class SequentialDiscoveryScanner:
+    """Discovery scanner che segue la logica sequenziale pura"""
     
-    def __init__(self, key_start=56500, key_end=56688, max_concurrent=50, timeout=3):
+    def __init__(self, reference_param=50416, reference_key=56609, max_concurrent=10, timeout=3):
         self.base_url = "https://servizionline.hspromilaprod.hypersicapp.net/cmsmonterotondo/portale/albopretorio/getfile.aspx"
         
-        # Configuration
-        self.key_start = key_start
-        self.key_end = key_end
+        # Parametri di riferimento (ieri sera)
+        self.reference_param = reference_param
+        self.reference_key = reference_key
+        
+        # Configuration conservativa
         self.max_concurrent = max_concurrent
-        self.timeout = aiohttp.ClientTimeout(total=timeout)
+        self.timeout = timeout
         
-        # Known patterns from validation (KEY → PARAM mappings)
-        self.known_mappings = {
-            56640: 50421, 56641: 50422, 56644: 50428, 56645: 50428,
-            56653: 50431, 56661: 50430, 56662: 50429, 56680: 50433,
-            56681: 50433, 56682: 50433
-        }
+        # Range di discovery basati sul punto di riferimento
+        self.param_discovery_range = 20  # ±20 PARAM dal riferimento
+        self.key_discovery_range = 100   # ±100 KEY dal riferimento
         
-        # Results and metrics
-        self.results = []
-        self.total_requests = 0
-        self.semaphore = asyncio.Semaphore(max_concurrent)
+        # Risultati
+        self.discovered_mappings = {}  # param_id -> [key_ids]
+        self.working_combinations = []
+        self.total_tests = 0
         
         # Setup logging
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.StreamHandler(sys.stdout),
-                logging.FileHandler('monterotondo_scan.log')
-            ]
+            handlers=[logging.StreamHandler(sys.stdout)]
         )
         self.logger = logging.getLogger(__name__)
-    
-    def predict_params_for_key(self, key_id: int) -> List[int]:
-        """Smart PARAM prediction based on discovered patterns"""
-        if key_id in self.known_mappings:
-            return [self.known_mappings[key_id]]
         
-        candidates = []
-        known_keys = sorted(self.known_mappings.keys())
-        
-        if len(known_keys) >= 2:
-            # Find nearest known points for interpolation/extrapolation
-            lower_key = max([k for k in known_keys if k <= key_id], default=None)
-            upper_key = min([k for k in known_keys if k > key_id], default=None)
-            
-            if lower_key and upper_key:
-                # Linear interpolation
-                lower_param = self.known_mappings[lower_key]
-                upper_param = self.known_mappings[upper_key]
-                ratio = (key_id - lower_key) / (upper_key - lower_key)
-                estimated = lower_param + (upper_param - lower_param) * ratio
-                
-                # Add candidates around estimate
-                for offset in [-1, 0, 1]:
-                    candidate = int(estimated) + offset
-                    if 50400 <= candidate <= 50434:
-                        candidates.append(candidate)
-            
-            elif lower_key:
-                # Extrapolation upward
-                if len(known_keys) >= 2:
-                    trend_keys = known_keys[-2:]
-                    key_diff = trend_keys[1] - trend_keys[0]
-                    param_diff = self.known_mappings[trend_keys[1]] - self.known_mappings[trend_keys[0]]
-                    
-                    if key_diff > 0:
-                        steps = (key_id - lower_key) / key_diff
-                        estimated = self.known_mappings[lower_key] + param_diff * steps
-                        
-                        for offset in [-1, 0, 1]:
-                            candidate = int(estimated) + offset
-                            if 50400 <= candidate <= 50434:
-                                candidates.append(candidate)
-        
-        # Fallback to most common PARAMs
-        if not candidates:
-            candidates = [50430, 50431, 50432, 50433, 50428, 50429]
-        
-        return candidates[:5]  # Max 5 candidates to keep it fast
-    
-    async def test_key_async(self, session: aiohttp.ClientSession, key_id: int) -> Optional[Dict]:
-        """Async test of a KEY with smart PARAM prediction"""
-        async with self.semaphore:
-            param_candidates = self.predict_params_for_key(key_id)
-            
-            for param_id in param_candidates:
-                try:
-                    url = f"{self.base_url}?SOURCE=DB&PARAM={param_id}&KEY={key_id}"
-                    
-                    async with session.head(url, timeout=self.timeout) as response:
-                        self.total_requests += 1
-                        
-                        if response.status == 200:
-                            # Found! Get complete document info
-                            doc_info = await self.get_document_info_async(session, param_id, key_id)
-                            
-                            # Update known mappings for future predictions
-                            self.known_mappings[key_id] = param_id
-                            
-                            self.logger.info(f"✅ KEY {key_id} → PARAM {param_id}")
-                            return doc_info
-                
-                except asyncio.TimeoutError:
-                    self.logger.debug(f"⏰ Timeout KEY {key_id} PARAM {param_id}")
-                    continue
-                except Exception as e:
-                    self.logger.debug(f"❌ Error KEY {key_id} PARAM {param_id}: {e}")
-                    continue
-            
-            self.logger.debug(f"❌ KEY {key_id} → Not found")
-            return None
-    
-    async def get_document_info_async(self, session: aiohttp.ClientSession, param_id: int, key_id: int) -> Dict:
-        """Get complete document info asynchronously"""
-        url = f"{self.base_url}?SOURCE=DB&PARAM={param_id}&KEY={key_id}"
-        
-        doc_info = {
-            'param_id': param_id,
-            'key_id': key_id,
-            'url': url,
-            'discovered_at': datetime.now().isoformat()
-        }
-        
+    async def test_combination(self, session: aiohttp.ClientSession, param_id: int, key_id: int) -> bool:
+        """Test singola combinazione PARAM/KEY"""
         try:
-            async with session.head(url, timeout=self.timeout) as response:
+            url = f"{self.base_url}?SOURCE=DB&PARAM={param_id}&KEY={key_id}"
+            timeout = aiohttp.ClientTimeout(total=self.timeout)
+            
+            async with session.head(url, timeout=timeout) as response:
+                self.total_tests += 1
+                
                 if response.status == 200:
+                    # Combinazione valida!
                     size = response.headers.get('Content-Length', '0')
-                    doc_info.update({
-                        'size_mb': round(int(size) / (1024 * 1024), 2),
-                        'content_type': response.headers.get('Content-Type', ''),
-                        'status': 'accessible'
-                    })
-        except:
-            doc_info['status'] = 'error'
-        
-        return doc_info
+                    
+                    combination = {
+                        'param_id': param_id,
+                        'key_id': key_id,
+                        'url': url,
+                        'size_mb': round(int(size) / (1024 * 1024), 2) if size.isdigit() else 0,
+                        'content_type': response.headers.get('Content-Type', 'unknown'),
+                        'discovered_at': datetime.now().isoformat()
+                    }
+                    
+                    self.working_combinations.append(combination)
+                    
+                    # Aggiungi alla mappatura
+                    if param_id not in self.discovered_mappings:
+                        self.discovered_mappings[param_id] = []
+                    self.discovered_mappings[param_id].append(key_id)
+                    
+                    return True
+                    
+                return False
+                
+        except Exception as e:
+            return False
     
-    async def scan_ultra_fast(self):
-        """Ultra-fast async scan with massive parallelization"""
-        total_keys = self.key_end - self.key_start + 1
+    async def discover_param_keys_sequential(self, session: aiohttp.ClientSession, param_id: int, start_key: int) -> List[int]:
+        """
+        Scopre tutti i KEY di un PARAM seguendo logica sequenziale
+        Testa KEY consecutivi finché non trova gap troppo grande
+        """
+        found_keys = []
+        current_key = start_key
+        consecutive_failures = 0
+        max_gap = 10  # Massimo gap prima di considerare PARAM finito
         
-        self.logger.info("🚀 MONTEROTONDO ASYNC SCANNER STARTED")
-        self.logger.info(f"📊 Range: KEY {self.key_start} → {self.key_end} ({total_keys} keys)")
-        self.logger.info(f"⚡ Max concurrent: {self.max_concurrent}")
-        self.logger.info(f"⏱️ Timeout: {self.timeout.total}s")
+        self.logger.info(f"🔍 Scanning PARAM {param_id} starting from KEY {start_key}")
+        
+        # Testa range intorno al punto di partenza
+        test_range = 50  # Testa ±50 KEY dal punto di partenza
+        
+        for offset in range(-test_range, test_range + 1):
+            test_key = start_key + offset
+            
+            if test_key < 56500:  # Limite inferiore ragionevole
+                continue
+                
+            if await self.test_combination(session, param_id, test_key):
+                found_keys.append(test_key)
+                consecutive_failures = 0
+                self.logger.info(f"  ✅ KEY {test_key} → PARAM {param_id}")
+            else:
+                consecutive_failures += 1
+                
+                # Se troppe failures consecutive, potrebbe essere finito
+                if consecutive_failures > max_gap and found_keys:
+                    break
+        
+        if found_keys:
+            self.logger.info(f"  📊 PARAM {param_id}: {len(found_keys)} KEY trovati")
+        else:
+            self.logger.info(f"  ❌ PARAM {param_id}: Nessun KEY trovato")
+            
+        return sorted(found_keys)
+    
+    async def verify_reference_point(self, session: aiohttp.ClientSession) -> bool:
+        """Verifica che il punto di riferimento sia ancora valido"""
+        self.logger.info(f"🧪 Verifying reference point: PARAM {self.reference_param} + KEY {self.reference_key}")
+        
+        if await self.test_combination(session, self.reference_param, self.reference_key):
+            self.logger.info("✅ Reference point still valid!")
+            return True
+        else:
+            self.logger.warning("⚠️ Reference point no longer valid, but continuing discovery...")
+            return False
+    
+    async def sequential_discovery_scan(self):
+        """
+        Discovery sequenziale basato sul punto di riferimento
+        Esplora PARAM intorno al riferimento con logica sequenziale
+        """
+        self.logger.info("🚀 SEQUENTIAL DISCOVERY SCANNER STARTED")
+        self.logger.info(f"📍 Reference point: PARAM {self.reference_param} + KEY {self.reference_key}")
+        self.logger.info(f"🔍 Discovery range: ±{self.param_discovery_range} PARAM, ±{self.key_discovery_range} KEY")
         
         start_time = time.time()
         
-        # Optimized connection setup
-        connector = aiohttp.TCPConnector(
-            limit=self.max_concurrent * 2,
-            keepalive_timeout=30,
-            enable_cleanup_closed=True,
-            limit_per_host=self.max_concurrent
-        )
-        
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
-            'Accept': '*/*',
-            'Accept-Encoding': 'gzip, deflate',
-            'Connection': 'keep-alive'
-        }
-        
-        async with aiohttp.ClientSession(
-            connector=connector,
-            headers=headers,
-            timeout=self.timeout,
-            raise_for_status=False
-        ) as session:
+        try:
+            # Setup connessione
+            connector = aiohttp.TCPConnector(
+                limit=self.max_concurrent,
+                limit_per_host=self.max_concurrent,
+                enable_cleanup_closed=True
+            )
             
-            # Create all tasks
-            all_keys = list(range(self.key_start, self.key_end + 1))
-            tasks = [self.test_key_async(session, key_id) for key_id in all_keys]
+            timeout = aiohttp.ClientTimeout(total=self.timeout)
             
-            # Process in batches with progress reporting
-            batch_size = 25
-            completed = 0
-            
-            for i in range(0, len(tasks), batch_size):
-                batch_tasks = tasks[i:i + batch_size]
-                batch_start = time.time()
+            async with aiohttp.ClientSession(
+                connector=connector,
+                timeout=timeout,
+                raise_for_status=False
+            ) as session:
                 
-                # Wait for batch completion
-                batch_results = await asyncio.gather(*batch_tasks, return_exceptions=True)
+                # FASE 1: Verifica punto di riferimento
+                await self.verify_reference_point(session)
                 
-                # Process results
-                for result in batch_results:
-                    if isinstance(result, dict):
-                        self.results.append(result)
-                    elif isinstance(result, Exception):
-                        self.logger.error(f"Task error: {result}")
+                # FASE 2: Discovery sequenziale PARAM per PARAM
+                param_start = self.reference_param - self.param_discovery_range
+                param_end = self.reference_param + self.param_discovery_range
                 
-                completed += len(batch_tasks)
-                batch_time = time.time() - batch_start
-                total_elapsed = time.time() - start_time
-                progress = completed / len(all_keys) * 100
+                self.logger.info(f"📊 Testing PARAM range: {param_start} → {param_end}")
                 
-                self.logger.info(
-                    f"📈 Progress: {progress:5.1f}% | "
-                    f"Batch: {len(batch_tasks)} keys in {batch_time:.1f}s | "
-                    f"Found: {len(self.results)} docs | "
-                    f"Requests: {self.total_requests}"
-                )
-                
-                # Small pause between batches
-                await asyncio.sleep(0.1)
+                for param_id in range(param_start, param_end + 1):
+                    # Per ogni PARAM, stima il KEY di partenza basandosi sul riferimento
+                    param_offset = param_id - self.reference_param
+                    
+                    # Stima KEY basandosi sulla posizione del PARAM
+                    # Assumiamo che PARAM successivi abbiano KEY più alti
+                    estimated_key = self.reference_key + (param_offset * 2)  # Stima conservativa
+                    
+                    # Scopri i KEY per questo PARAM
+                    param_keys = await self.discover_param_keys_sequential(session, param_id, estimated_key)
+                    
+                    if param_keys:
+                        self.logger.info(f"✅ PARAM {param_id}: {len(param_keys)} KEY → {min(param_keys)}-{max(param_keys)}")
+                    
+                    # Pausa micro tra PARAM
+                    await asyncio.sleep(0.1)
         
-        # Final statistics
+        except Exception as e:
+            self.logger.error(f"Critical error in discovery: {e}")
+            raise
+        
+        # FASE 3: Analisi risultati
         total_time = time.time() - start_time
         
-        self.logger.info("🏁 SCAN COMPLETED")
+        self.logger.info("🏁 SEQUENTIAL DISCOVERY COMPLETED")
         self.logger.info(f"⏱️ Total time: {total_time:.1f}s ({total_time/60:.1f} min)")
-        self.logger.info(f"📊 Documents found: {len(self.results)}/{total_keys} ({len(self.results)/total_keys*100:.1f}%)")
-        self.logger.info(f"🧪 Total requests: {self.total_requests:,}")
-        self.logger.info(f"⚡ Requests/second: {self.total_requests/total_time:.1f}")
-        self.logger.info(f"📈 Documents/second: {len(self.results)/total_time:.1f}")
+        self.logger.info(f"🧪 Total tests: {self.total_tests}")
+        self.logger.info(f"📊 Working combinations: {len(self.working_combinations)}")
+        self.logger.info(f"📊 Active PARAMs: {len(self.discovered_mappings)}")
         
-        if self.total_requests > 0:
-            efficiency = len(self.results) / self.total_requests * 100
-            self.logger.info(f"🎯 Efficiency: {efficiency:.1f}%")
+        if self.discovered_mappings:
+            self.logger.info("📋 DISCOVERED ACTIVE PARAMs:")
+            for param_id in sorted(self.discovered_mappings.keys()):
+                keys = sorted(self.discovered_mappings[param_id])
+                key_range = f"{keys[0]}-{keys[-1]}" if len(keys) > 1 else str(keys[0])
+                self.logger.info(f"   PARAM {param_id}: {len(keys)} docs, KEY range {key_range}")
         
-        return self.results
+        return self.working_combinations
     
-    def export_results(self):
-        """Export results with metadata"""
-        if not self.results:
-            self.logger.warning("No results to export")
-            return None
+    def analyze_sequential_patterns(self) -> Dict:
+        """Analizza i pattern sequenziali scoperti"""
+        if not self.discovered_mappings:
+            return {}
         
-        timestamp = datetime.now()
-        
-        export_data = {
-            'scan_metadata': {
-                'method': 'async_ultra_fast_github',
-                'timestamp': timestamp.isoformat(),
-                'configuration': {
-                    'key_range': [self.key_start, self.key_end],
-                    'max_concurrent': self.max_concurrent,
-                    'timeout_seconds': self.timeout.total
-                },
-                'statistics': {
-                    'total_requests': self.total_requests,
-                    'documents_found': len(self.results),
-                    'success_rate': len(self.results) / (self.key_end - self.key_start + 1) * 100
-                }
+        analysis = {
+            'reference_point': {
+                'param': self.reference_param,
+                'key': self.reference_key
             },
-            'documents': sorted(self.results, key=lambda x: x['key_id'], reverse=True)
+            'discovered_params': sorted(list(self.discovered_mappings.keys())),
+            'param_count': len(self.discovered_mappings),
+            'total_documents': len(self.working_combinations)
         }
         
-        filename = f"monterotondo_scan_{timestamp.strftime('%Y%m%d_%H%M%S')}.json"
+        # Analisi range
+        if self.discovered_mappings:
+            min_param = min(self.discovered_mappings.keys())
+            max_param = max(self.discovered_mappings.keys())
+            analysis['param_range'] = {
+                'min': min_param,
+                'max': max_param,
+                'span': max_param - min_param + 1
+            }
+            
+            # Analisi KEY
+            all_keys = []
+            for keys in self.discovered_mappings.values():
+                all_keys.extend(keys)
+            
+            if all_keys:
+                analysis['key_range'] = {
+                    'min': min(all_keys),
+                    'max': max(all_keys),
+                    'span': max(all_keys) - min(all_keys) + 1
+                }
+        
+        # Pattern sequenziali
+        sequential_patterns = []
+        sorted_params = sorted(self.discovered_mappings.keys())
+        
+        for i in range(len(sorted_params) - 1):
+            curr_param = sorted_params[i]
+            next_param = sorted_params[i + 1]
+            
+            curr_keys = sorted(self.discovered_mappings[curr_param])
+            next_keys = sorted(self.discovered_mappings[next_param])
+            
+            # Verifica se i KEY sono sequenziali
+            if curr_keys and next_keys:
+                last_key_curr = max(curr_keys)
+                first_key_next = min(next_keys)
+                gap = first_key_next - last_key_curr
+                
+                sequential_patterns.append({
+                    'param_from': curr_param,
+                    'param_to': next_param,
+                    'last_key_from': last_key_curr,
+                    'first_key_to': first_key_next,
+                    'gap': gap,
+                    'is_sequential': gap <= 5  # Gap piccolo = sequenziale
+                })
+        
+        analysis['sequential_patterns'] = sequential_patterns
+        
+        return analysis
+    
+    def export_discovery_results(self):
+        """Export risultati con focus sui pattern sequenziali"""
+        timestamp = datetime.now()
+        
+        analysis = self.analyze_sequential_patterns()
+        
+        export_data = {
+            'discovery_metadata': {
+                'method': 'sequential_discovery_pure',
+                'timestamp': timestamp.isoformat(),
+                'reference_point': {
+                    'param': self.reference_param,
+                    'key': self.reference_key
+                },
+                'discovery_ranges': {
+                    'param_range': self.param_discovery_range,
+                    'key_range': self.key_discovery_range
+                },
+                'total_tests': self.total_tests
+            },
+            'pattern_analysis': analysis,
+            'param_key_mappings': {
+                str(param_id): sorted(keys) 
+                for param_id, keys in self.discovered_mappings.items()
+            },
+            'working_combinations': sorted(
+                self.working_combinations, 
+                key=lambda x: (x['param_id'], x['key_id'])
+            )
+        }
+        
+        filename = f"monterotondo_sequential_discovery_{timestamp.strftime('%Y%m%d_%H%M%S')}.json"
         
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
         
-        self.logger.info(f"💾 Results exported to: {filename}")
+        self.logger.info(f"💾 Sequential discovery results exported to: {filename}")
         return filename
 
 async def main():
-    parser = argparse.ArgumentParser(description='Monterotondo Albo Pretorio Ultra-Fast Scanner')
-    parser.add_argument('--key-start', type=int, default=56500, help='Starting KEY')
-    parser.add_argument('--key-end', type=int, default=56688, help='Ending KEY')
-    parser.add_argument('--concurrency', type=int, default=50, help='Max concurrent requests')
+    parser = argparse.ArgumentParser(description='Monterotondo Sequential Discovery Scanner')
+    parser.add_argument('--reference-param', type=int, default=50416, help='Reference PARAM from yesterday')
+    parser.add_argument('--reference-key', type=int, default=56609, help='Reference KEY from yesterday')
+    parser.add_argument('--param-range', type=int, default=20, help='PARAM discovery range (±N)')
+    parser.add_argument('--key-range', type=int, default=100, help='KEY discovery range (±N)')
+    parser.add_argument('--concurrency', type=int, default=10, help='Max concurrent requests')
     parser.add_argument('--timeout', type=int, default=3, help='Request timeout in seconds')
     
     args = parser.parse_args()
     
-    print("🚀 MONTEROTONDO ALBO PRETORIO - ULTRA FAST SCANNER")
-    print("=" * 55)
-    print(f"📊 Configuration:")
-    print(f"   KEY range: {args.key_start} → {args.key_end}")
-    print(f"   Concurrency: {args.concurrency}")
-    print(f"   Timeout: {args.timeout}s")
+    print("🔍 MONTEROTONDO SEQUENTIAL DISCOVERY SCANNER")
+    print("=" * 50)
+    print("🎯 Based on yesterday's parameters + sequential logic")
+    print(f"📍 Reference: PARAM {args.reference_param} + KEY {args.reference_key}")
+    print(f"🔍 Will test ±{args.param_range} PARAM, ±{args.key_range} KEY")
+    print("💡 Follows pure sequential logic: PARAM→KEY consecutive mapping")
     print()
     
-    scanner = MonterotondoAsyncScanner(
-        key_start=args.key_start,
-        key_end=args.key_end,
+    scanner = SequentialDiscoveryScanner(
+        reference_param=args.reference_param,
+        reference_key=args.reference_key,
         max_concurrent=args.concurrency,
         timeout=args.timeout
     )
     
+    # Update discovery ranges if specified
+    scanner.param_discovery_range = args.param_range
+    scanner.key_discovery_range = args.key_range
+    
     try:
-        results = await scanner.scan_ultra_fast()
+        results = await scanner.sequential_discovery_scan()
         
         if results:
-            filename = scanner.export_results()
-            print(f"\n🎉 SUCCESS! Found {len(results)} documents")
+            filename = scanner.export_discovery_results()
+            print(f"\n🎉 SEQUENTIAL DISCOVERY SUCCESS!")
+            print(f"📊 Found {len(results)} working combinations")
+            print(f"📊 Active PARAMs: {sorted(list(scanner.discovered_mappings.keys()))}")
             print(f"📄 Results saved to: {filename}")
+            print(f"\n💡 These are the current active PARAM→KEY mappings!")
+            print("🔄 Use these to update the main scanner with correct sequential logic")
         else:
-            print("\n❌ No documents found")
+            print("\n❌ No active combinations found")
+            print("💡 Try adjusting the reference point or expanding the discovery ranges")
             
     except KeyboardInterrupt:
-        print("\n⚠️ Scan interrupted by user")
+        print("\n⚠️ Discovery interrupted by user")
     except Exception as e:
-        print(f"\n❌ Scan failed: {e}")
+        print(f"\n❌ Discovery failed: {e}")
         raise
 
 if __name__ == "__main__":
