@@ -28,10 +28,6 @@ on:
         description: 'Request timeout in seconds (default: 5)'
         default: '5'
         required: false
-  
-  # Optional: schedule for automatic discovery
-  schedule:
-    - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
 
 jobs:
   sequential-discovery:
@@ -67,29 +63,13 @@ jobs:
         
         echo "Discovery completed!"
         
-        # Get discovery results for summary
-        if [ -f monterotondo_sequential_discovery_*.json ]; then
-          RESULT_FILE=$(ls monterotondo_sequential_discovery_*.json | head -1)
-          echo "result_file=$RESULT_FILE" >> $GITHUB_OUTPUT
-          
-          # Extract key metrics using Python
-          python -c "
-import json
-import sys
-try:
-    with open('$RESULT_FILE') as f:
-        data = json.load(f)
-    combinations = data.get('discovery_metadata', {}).get('total_tests', 0)
-    working_combinations = len(data.get('working_combinations', []))
-    active_params = len(data.get('param_key_mappings', {}))
-    print('combinations=' + str(combinations))
-    print('working_combinations=' + str(working_combinations))
-    print('active_params=' + str(active_params))
-except Exception as e:
-    print('combinations=0')
-    print('working_combinations=0')
-    print('active_params=0')
-" >> $GITHUB_OUTPUT
+        # Check if results file exists
+        if ls monterotondo_sequential_discovery_*.json 1> /dev/null 2>&1; then
+          echo "discovery_success=true" >> $GITHUB_OUTPUT
+          echo "Results file found!"
+        else
+          echo "discovery_success=false" >> $GITHUB_OUTPUT
+          echo "No results file found."
         fi
         
     - name: 📊 Generate Discovery Summary
@@ -103,19 +83,14 @@ except Exception as e:
         - **Concurrency**: ${{ github.event.inputs.concurrency || '10' }} requests
         - **Timeout**: ${{ github.event.inputs.timeout || '5' }}s per request
         
-        ## 🎯 Discovery Results
-        - **Total Tests**: ${{ steps.discovery.outputs.combinations || 'N/A' }}
-        - **Working Combinations**: ${{ steps.discovery.outputs.working_combinations || 'N/A' }}
-        - **Active PARAMs Found**: ${{ steps.discovery.outputs.active_params || 'N/A' }}
-        
-        ## ⚡ Performance
-        - **Method**: Sequential Discovery (Pure Logic)
+        ## 🎯 Discovery Status
         - **Execution**: ${{ job.status }}
+        - **Results Generated**: ${{ steps.discovery.outputs.discovery_success }}
         - **Environment**: GitHub Actions (Ubuntu Latest)
         
         ## 📄 Next Steps
         1. Download the discovery results from artifacts
-        2. Analyze the active PARAM→KEY mappings
+        2. Analyze the active PARAM→KEY mappings in the JSON file
         3. Update the main scanner with discovered patterns
         
         ---
@@ -132,7 +107,7 @@ except Exception as e:
         retention-days: 30
         
     - name: 🏷️ Create Discovery Release (if successful)
-      if: success() && steps.discovery.outputs.working_combinations && steps.discovery.outputs.working_combinations != '0'
+      if: success() && steps.discovery.outputs.discovery_success == 'true'
       uses: softprops/action-gh-release@v1
       with:
         tag_name: discovery-${{ github.run_number }}
@@ -142,10 +117,8 @@ except Exception as e:
           
           ## 📊 Discovery Summary
           - **Reference Point**: PARAM ${{ github.event.inputs.reference_param || '50416' }} + KEY ${{ github.event.inputs.reference_key || '56609' }}
-          - **Working Combinations**: ${{ steps.discovery.outputs.working_combinations }}
-          - **Active PARAMs**: ${{ steps.discovery.outputs.active_params }}
-          - **Total Tests**: ${{ steps.discovery.outputs.combinations }}
-          - **Discovery Date**: ${{ github.event.head_commit.timestamp }}
+          - **Discovery Ranges**: ±${{ github.event.inputs.param_range || '20' }} PARAM, ±${{ github.event.inputs.key_range || '100' }} KEY
+          - **Discovery Date**: ${{ github.run_started_at }}
           
           ## 🎯 What This Means
           This discovery scan found the currently active PARAM→KEY mappings using pure sequential logic.
@@ -174,9 +147,12 @@ except Exception as e:
       run: |
         if [ "${{ job.status }}" = "success" ]; then
           echo "✅ Sequential discovery completed successfully!"
-          echo "📊 Found ${{ steps.discovery.outputs.working_combinations || '0' }} working combinations"
-          echo "📊 Discovered ${{ steps.discovery.outputs.active_params || '0' }} active PARAMs"
-          echo "💡 Check artifacts for detailed results"
+          echo "📊 Check artifacts for detailed results"
+          if [ "${{ steps.discovery.outputs.discovery_success }}" = "true" ]; then
+            echo "📄 Results file generated successfully"
+          else
+            echo "⚠️ No results file found - check logs"
+          fi
         else
           echo "❌ Sequential discovery failed!"
           echo "🔍 This could be due to:"
