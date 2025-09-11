@@ -73,22 +73,23 @@ jobs:
           echo "result_file=$RESULT_FILE" >> $GITHUB_OUTPUT
           
           # Extract key metrics using Python
-          COMBINATIONS_FOUND=$(python -c "
+          python -c "
 import json
+import sys
 try:
     with open('$RESULT_FILE') as f:
         data = json.load(f)
     combinations = data.get('discovery_metadata', {}).get('total_tests', 0)
     working_combinations = len(data.get('working_combinations', []))
     active_params = len(data.get('param_key_mappings', {}))
-    print(f'combinations={combinations}')
-    print(f'working_combinations={working_combinations}')
-    print(f'active_params={active_params}')
+    print('combinations=' + str(combinations))
+    print('working_combinations=' + str(working_combinations))
+    print('active_params=' + str(active_params))
 except Exception as e:
-    print(f'combinations=0')
-    print(f'working_combinations=0') 
-    print(f'active_params=0')
-" >> $GITHUB_OUTPUT)
+    print('combinations=0')
+    print('working_combinations=0')
+    print('active_params=0')
+" >> $GITHUB_OUTPUT
         fi
         
     - name: 📊 Generate Discovery Summary
