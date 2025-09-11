@@ -171,7 +171,6 @@ class MonterotondoAsyncScanner:
             limit=self.max_concurrent * 2,
             keepalive_timeout=30,
             enable_cleanup_closed=True,
-            force_close=True,
             limit_per_host=self.max_concurrent
         )
         
