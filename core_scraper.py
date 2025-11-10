@@ -10,6 +10,24 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 
 import logging
+import os, datetime as dt, requests
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
+def scarica_da(since: dt.date):
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    driver = webdriver.Firefox(options=options)
+    try:
+        driver.get(os.getenv("ALBO_URL"))
+        # … qui il TUO codice esistente …
+        for atto in tua_logica():
+            pdf_resp = requests.get(atto["pdf_link"], timeout=60)
+            yield atto["id"], atto["data"], atto["oggetto"], pdf_resp.content
+    finally:
+        driver.quit()
+        
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -470,3 +488,4 @@ class AlboDetailedExtractor:
 if __name__ == '__main__':
     scraper = AlboDetailedExtractor(headless=False)
     scraper.run_scraper()
+
