@@ -1,0 +1,6 @@
+selenium
+requests
+beautifulsoup4
+pandas
+supabase-py
+google-cloud-storage
