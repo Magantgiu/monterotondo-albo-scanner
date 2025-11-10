@@ -2,5 +2,5 @@ selenium
 requests
 beautifulsoup4
 pandas
-supabase-py
+supabase
 google-cloud-storage
