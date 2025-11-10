@@ -1,3 +1,6 @@
-# Monterotondo Albo Pretorio Scanner Dependencies
-aiohttp>=3.9.0
-asyncio
+selenium
+requests
+beautifulsoup4
+pandas
+supabase-py
+google-cloud-storage
