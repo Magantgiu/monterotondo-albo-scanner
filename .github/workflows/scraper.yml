@@ -15,8 +15,9 @@ jobs:
         with:
           python-version: "3.11"
 
-      - uses: browser-actions/setup-chrome@v1
-      - uses: browser-actions/setup-chromedriver@v1
+      - uses: browser-actions/setup-chrome@v2
+        with:
+          install-chromedriver: true
 
       - run: pip install -r requirements.txt
 
