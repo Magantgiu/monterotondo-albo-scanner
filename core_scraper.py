@@ -11,8 +11,6 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 
 import logging
 import os, datetime as dt, requests
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 
 def scarica_da(since: dt.date):
     options = Options()
@@ -490,5 +488,6 @@ class AlboDetailedExtractor:
 if __name__ == '__main__':
     scraper = AlboDetailedExtractor(headless=False)
     scraper.run_scraper()
+
 
 
