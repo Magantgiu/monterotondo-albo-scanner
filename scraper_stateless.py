@@ -31,7 +31,7 @@ import sqlite3
 import pandas as pd
 import os
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,12 +96,12 @@ class AlboDetailedExtractor:
             logger.error(f"❌ Errore inizializzazione DB: {e}")
 
     def setup_firefox(self):
-        """Setup Firefox con opzioni ottimizzate."""
+        """Setup Chrome con opzioni ottimizzate."""
         options = Options()
         
         if self.headless:
             options.add_argument("--headless")
-            logger.info("🖥️ Firefox in modalità HEADLESS")
+            logger.info("🖥️ Chrome in modalità HEADLESS")
         
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
@@ -117,7 +117,7 @@ class AlboDetailedExtractor:
         logger.info(f"📁 Download directory: {os.path.abspath(self.download_dir)}")
         
         try:
-            driver = webdriver.Firefox(options=options)
+            driver = webdriver.chrome(options=options)
             driver.current_page = 1
             return driver
         except Exception as e:
