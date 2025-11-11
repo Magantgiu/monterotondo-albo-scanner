@@ -18,13 +18,6 @@ jobs:
       - name: Install Chrome & chromedriver
         - uses: actions/checkout@v4
         - uses: actions/setup-python@v5
-          with:
-            python-version: "3.11"
-        - uses: browser-actions/setup-chrome@v1
-        - uses: browser-actions/setup-chromedriver@v1
-        - run: pip install -r requirements.txt
-        - run: python scraper_stateless.py
-        - run: pip install -r requirements.txt
 
       - name: Run scraper
         env:
