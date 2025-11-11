@@ -85,10 +85,22 @@ class AlboDetailedExtractor:
         except Exception as e:
             logger.error(f"❌ Errore inizializzazione DB: {e}")
 
-    def setup_firefox(self):
-        """Setup Firefox con opzioni ottimizzate."""
+    def setup_chrome(self):
+        from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options
         options = Options()
-        
+        if self.headless:
+            options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_experimental_option("prefs", {
+            "download.default_directory": os.path.abspath(self.download_dir),
+            "download.prompt_for_download": False,
+            "plugins.always_open_pdf_externally": True
+        })
+        driver = webdriver.Chrome(options=options)
+        driver.current_page = 1
+        return driver    
         if self.headless:
             options.add_argument("--headless")
             logger.info("🖥️ Firefox in modalità HEADLESS")
@@ -442,7 +454,7 @@ class AlboDetailedExtractor:
         """Ciclo principale."""
         driver = None
         try:
-            driver = self.setup_firefox()
+            driver = self.setup_chrome()
             driver.get(self.albo_url)
             self.handle_cookies(driver)
             
@@ -488,6 +500,7 @@ class AlboDetailedExtractor:
 if __name__ == '__main__':
     scraper = AlboDetailedExtractor(headless=False)
     scraper.run_scraper()
+
 
 
 
