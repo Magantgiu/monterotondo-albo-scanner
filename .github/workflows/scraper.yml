@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Chrome & geckodriver
+      - name: Install Chrome & chromedriver
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser chromium-chromedriver
