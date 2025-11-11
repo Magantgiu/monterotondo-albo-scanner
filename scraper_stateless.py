@@ -11,7 +11,7 @@ GCS_BUCKET   = os.getenv("GCS_BUCKET")
 def last_check_date() -> dt.date:
     sup: Client = create_client(SUP_URL, SUP_KEY)
     row = sup.table("atti").select("data_pubb").order("data_pubb", desc=True).limit(1).execute()
-    return dt.datetime.fromisoformat(row.data[0]["data_pubb"]).date() if row.data else dt.date(2020,1,1)
+    return dt.datetime.fromisoformat(row.data[0]["data_pubb"]).date() if row.data else dt.date(2025,11,1)
 
 def save_to_cloud(pdf_bytes, atto_id, data_pubb, oggetto):
     gcs = storage.Client()
