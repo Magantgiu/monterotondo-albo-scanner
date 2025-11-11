@@ -1,4 +1,4 @@
-name: Scraping Albo – Firefox headless
+name: Scraping Albo – Chrome headless
 
 on:
   schedule:
