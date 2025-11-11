@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 import os
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -16,9 +16,11 @@ from selenium.webdriver.firefox.options import Options
 
 def scarica_da(since: dt.date):
     options = Options()
-    options.add_argument("--headless")
+    options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
-    driver = webdriver.Firefox(options=options)
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(options=options)
+
     try:
         driver.get(os.getenv("ALBO_URL"))
         # … qui il TUO codice esistente …
@@ -488,4 +490,5 @@ class AlboDetailedExtractor:
 if __name__ == '__main__':
     scraper = AlboDetailedExtractor(headless=False)
     scraper.run_scraper()
+
 
