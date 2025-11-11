@@ -1,29 +1,5 @@
 # 🚀 Monterotondo Albo Pretorio - Ultra Fast Scanner
 
-**Ultra-fast async scanner for Monterotondo municipality's Albo Pretorio (Public Notice Board)**
-
-[![Scanner Status](https://github.com/your-username/monterotondo-albo-scanner/actions/workflows/monterotondo-scanner.yml/badge.svg)](https://github.com/your-username/monterotondo-albo-scanner/actions)
-
-## 📊 What it does
-
-This scanner efficiently discovers and catalogs all documents published in the [Monterotondo Albo Pretorio](https://servizionline.hspromilaprod.hypersicapp.net/cmsmonterotondo/portale/albopretorio/) using advanced async techniques and smart pattern recognition.
-
-### ✨ Key Features
-
-- **🚀 Ultra-fast**: 188 documents in 30-60 seconds (vs 30+ minutes with traditional methods)
-- **🧠 Smart prediction**: AI-powered PARAM prediction based on discovered patterns
-- **⚡ Massive parallelization**: Up to 100 concurrent requests
-- **📊 Complete metadata**: Document size, type, accessibility status
-- **🔄 GitHub Actions integration**: Automated scanning with CI/CD
-- **📈 Progress tracking**: Real-time scan progress and statistics
-
-## 🎯 Performance
-
-| Method | Time | Requests | Efficiency |
-|--------|------|----------|------------|
-| **Traditional sequential** | 30+ min | 180,000+ | ~0.3% |
-| **This async scanner** | **30-60 sec** | **~1,000** | **~60%** |
-
 ## 🚀 Quick Start
 
 ### Option 1: GitHub Actions (Recommended)
