@@ -94,7 +94,9 @@ def scarica_da(since: dt.date):
                     continue
 
                 # Entra nel dettaglio
-                cells[4].click()
+                driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", cells[4])
+                time.sleep(0.5)
+                driver.execute_script("arguments[0].click();", cells[4])
                 time.sleep(3)
                 wait.until(EC.presence_of_element_located((By.ID, ALLEGATI_PANEL_ID)))
 
@@ -133,3 +135,4 @@ def scarica_da(since: dt.date):
 
     finally:
         driver.quit()
+
