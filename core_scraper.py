@@ -83,11 +83,10 @@ def scarica_da(since: dt.date):
             time.sleep(2)
 
             # Estrai dati STRUTTURALI delle righe (non gli elementi stessi!)
-            # Questo evita stale element reference
             rows_data = []
             try:
                 rows = driver.find_elements(By.CSS_SELECTOR, f"#{ALBO_TABLE_CONTAINER_ID} tbody tr")
-                for row in rows:
+                for idx, row in enumerate(rows):
                     try:
                         cells = row.find_elements(By.TAG_NAME, "td")
                         if len(cells) < 8:
@@ -97,8 +96,9 @@ def scarica_da(since: dt.date):
                         data_atto   = cells[7].text.strip()
                         oggetto     = cells[4].text.strip()
                         
-                        # Salva solo i DATI, non gli elementi!
+                        # Salva solo i DATI + l'indice della riga
                         rows_data.append({
+                            "row_index": idx,
                             "numero": numero_atto,
                             "data": data_atto,
                             "oggetto": oggetto,
@@ -113,10 +113,11 @@ def scarica_da(since: dt.date):
             print(f"📊 Trovate {len(rows_data)} righe da elaborare")
 
             # Elabora i dati estratti
-            for idx, row_info in enumerate(rows_data):
+            for row_info in rows_data:
                 numero_atto = row_info["numero"]
                 data_atto = row_info["data"]
                 oggetto = row_info["oggetto"]
+                row_idx = row_info["row_index"]
 
                 # Salta intestazioni o atti senza PDF
                 if not numero_atto.isdigit() or "NOT.ART. 140 C.P.C." in oggetto or not data_atto:
@@ -133,56 +134,36 @@ def scarica_da(since: dt.date):
                     print(f"⏭ Atto {numero_atto} più vecchio di {since}")
                     continue
 
-                print(f"🔍 [{idx+1}/{len(rows_data)}] Elaboro atto {numero_atto} ({data_pubb}): {oggetto[:50]}...")
+                print(f"🔍 Elaboro atto {numero_atto} ({data_pubb}): {oggetto[:50]}...")
 
-                # RICERCA L'ELEMENTO FRESCO dalla pagina attuale
                 try:
+                    # Ricerca l'elemento usando L'INDICE, non il numero
                     rows = driver.find_elements(By.CSS_SELECTOR, f"#{ALBO_TABLE_CONTAINER_ID} tbody tr")
-                    target_row = None
                     
-                    for row in rows:
-                        try:
-                            cells = row.find_elements(By.TAG_NAME, "td")
-                            if len(cells) >= 4 and cells[3].text.strip() == numero_atto:
-                                target_row = row
-                                break
-                        except StaleElementReferenceException:
-                            continue
-                    
-                    if not target_row:
-                        print(f"  ✗ Riga non trovata per {numero_atto}")
+                    if row_idx >= len(rows):
+                        print(f"  ✗ Indice {row_idx} fuori range (righe disponibili: {len(rows)})")
                         continue
                     
-                    # Click sulla riga
+                    target_row = rows[row_idx]
                     cells = target_row.find_elements(By.TAG_NAME, "td")
+                    
                     if len(cells) < 5:
+                        print(f"  ✗ Cella non ha abbastanza colonne")
                         continue
-                        
+                    
+                    # Scroll e click
                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", cells[4])
                     time.sleep(0.5)
                     
-                    # Prova il click con retry
-                    for attempt in range(3):
-                        try:
-                            # Attendi che sia cliccabile
-                            wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"#{ALBO_TABLE_CONTAINER_ID} tbody tr")))
-                            driver.execute_script("arguments[0].click();", cells[4])
-                            break
-                        except Exception as e:
-                            if attempt < 2:
-                                print(f"  ⚠ Click fallito, retry {attempt+1}/3...")
-                                time.sleep(1)
-                            else:
-                                print(f"  ✗ Click definitivamente fallito: {e}")
-                                raise
-                    
+                    # Click con JavaScript per evitare intercept
+                    driver.execute_script("arguments[0].click();", cells[4])
                     time.sleep(3)
                     
+                    # Attendi il panel allegati
                     try:
-                        wait.until(EC.presence_of_element_located((By.ID, ALLEGATI_PANEL_ID)))
+                        wait.until(EC.presence_of_element_located((By.ID, ALLEGATI_PANEL_ID)), timeout=5)
                     except TimeoutException:
-                        print(f"  ⚠ Panel allegati non trovato per atto {numero_atto}")
-                        # Torna alla lista comunque
+                        print(f"  ⚠ Panel allegati non trovato")
                         try:
                             wait.until(EC.element_to_be_clickable((By.ID, LISTA_ATTI_BUTTON_ID))).click()
                             time.sleep(2)
@@ -200,7 +181,7 @@ def scarica_da(since: dt.date):
                             if "(Originale)" in txt and not txt.lower().endswith(".p7m"):
                                 print(f"  📥 Scarico: {txt}")
                                 link.click()
-                                time.sleep(4)  # attesa download
+                                time.sleep(4)
                                 
                                 # Prendi file più recente dalla cartella
                                 files = sorted(
@@ -218,26 +199,34 @@ def scarica_da(since: dt.date):
                                 break
                         except StaleElementReferenceException:
                             continue
-                    
+
                     if not pdf_trovato:
-                        print(f"  ⚠ Nessun PDF originale trovato per {numero_atto}")
+                        print(f"  ⚠ Nessun PDF originale trovato")
 
                     # Torna alla lista
                     try:
-                        wait.until(EC.element_to_be_clickable((By.ID, LISTA_ATTI_BUTTON_ID))).click()
+                        back_btn = wait.until(EC.element_to_be_clickable((By.ID, LISTA_ATTI_BUTTON_ID)), timeout=5)
+                        back_btn.click()
                         time.sleep(2)
                     except Exception as e:
                         print(f"  ⚠ Errore tornando alla lista: {e}")
 
-                except Exception as e:
-                    print(f"  ✗ Errore elaborando atto {numero_atto}: {e}")
-                    # Tenta comunque di tornare alla lista
+                except StaleElementReferenceException as e:
+                    print(f"  ✗ Elemento stale (DOM rigenerato): {e}")
                     try:
-                        wait.until(EC.element_to_be_clickable((By.ID, LISTA_ATTI_BUTTON_ID))).click()
+                        back_btn = wait.until(EC.element_to_be_clickable((By.ID, LISTA_ATTI_BUTTON_ID)), timeout=5)
+                        back_btn.click()
                         time.sleep(2)
                     except:
                         pass
-                    continue
+                except Exception as e:
+                    print(f"  ✗ Errore: {e}")
+                    try:
+                        back_btn = wait.until(EC.element_to_be_clickable((By.ID, LISTA_ATTI_BUTTON_ID)), timeout=5)
+                        back_btn.click()
+                        time.sleep(2)
+                    except:
+                        pass
 
             # Prossima pagina
             try:
@@ -245,7 +234,7 @@ def scarica_da(since: dt.date):
                 next_btn.click()
                 page += 1
                 time.sleep(3)
-                print(f"→ Passando a pagina {page}")
+                print(f"→ Passando a pagina {page}\n")
             except Exception:
                 print("→ Nessuna pagina successiva trovata")
                 break
