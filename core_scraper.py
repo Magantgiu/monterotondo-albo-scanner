@@ -1,7 +1,7 @@
 """
 core_scraper.py
 Scarica atti da albo Hypersic (Monterotondo) – solo cloud-ready.
-Pattern basato su UIVision RPA automation
+Pattern basato su versione Firefox funzionante
 """
 import os
 import datetime as dt
@@ -16,7 +16,7 @@ from selenium.common.exceptions import TimeoutException, StaleElementReferenceEx
 # ---------- CONFIG ----------
 TABLE_ID = "ctl00_ctl00_area_main_ContentPlaceHolderContenuto_albo_pretorio_container_tab_risultati_tab_risultati_table"
 ALLEGATI_PANEL_ID = "ctl00_ctl00_area_main_ContentPlaceHolderContenuto_albo_pretorio_container_tab_dettaglio_tab_dettaglio_sidebar_allegati_tab_dettaglio_sidebar_allegati_pnl"
-BACK_TAB_ID = "ctl00_ctl00_area_main_ContentPlaceHolderContenuto_albo_pretorio_container_tab"
+LISTA_ATTI_BUTTON_ID = "tab_pnlnav_tab_risultati"
 # ----------------------------
 
 def scarica_da(since: dt.date):
@@ -76,29 +76,30 @@ def scarica_da(since: dt.date):
             
             time.sleep(2)
 
-            # Estrai righe dalla tabella usando lo XPath esatto di UIVision
+            # Estrai righe dalla tabella
             try:
-                # Questo XPath corrisponde a: #table/div/div/table/tbody/tr
-                row_xpath = f"//*[@id='{TABLE_ID}']/div/div/table/tbody/tr"
-                rows = driver.find_elements(By.XPATH, row_xpath)
+                table_container = driver.find_element(By.ID, TABLE_ID)
+                table = table_container.find_element(By.TAG_NAME, "table")
+                rows = table.find_elements(By.XPATH, ".//tbody/tr")
                 print(f"📊 Trovate {len(rows)} righe")
             except Exception as e:
                 print(f"✗ Errore estraendo righe: {e}")
                 break
 
             # Per ogni riga, elabora
-            for row_num in range(1, len(rows) + 1):
+            for row_idx in range(len(rows)):
                 try:
-                    # Ricaricare ogni volta per evitare stale elements
-                    rows = driver.find_elements(By.XPATH, row_xpath)
+                    # RICARICARE le righe ogni volta
+                    table_container = driver.find_element(By.ID, TABLE_ID)
+                    table = table_container.find_element(By.TAG_NAME, "table")
+                    rows = table.find_elements(By.XPATH, ".//tbody/tr")
                     
-                    if row_num > len(rows):
+                    if row_idx >= len(rows):
                         continue
                     
-                    row = rows[row_num - 1]  # Gli indici partono da 0, ma gli XPath da 1
-                    
-                    # Estrai dati dalla riga
+                    row = rows[row_idx]
                     cells = row.find_elements(By.TAG_NAME, "td")
+                    
                     if len(cells) < 8:
                         continue
                     
@@ -120,64 +121,85 @@ def scarica_da(since: dt.date):
 
                     print(f"🔍 Atto {numero_atto} ({data_pubb}): {oggetto[:50]}...")
 
-                    # CLICK sulla riga (colonna 5 = oggetto)
-                    # XPath: //*[@id="table"]/div/div/table/tbody/tr[N]/td[5]
-                    click_xpath = f"//*[@id='{TABLE_ID}']/div/div/table/tbody/tr[{row_num}]/td[5]"
-                    try:
-                        el = wait.until(EC.element_to_be_clickable((By.XPATH, click_xpath)))
-                        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", el)
-                        time.sleep(0.5)
-                        driver.execute_script("arguments[0].click();", el)
-                        time.sleep(3)
-                    except Exception as e:
-                        print(f"  ✗ Click sulla riga fallito: {e}")
-                        continue
+                    # CLICK direttamente sulla cella (cells[4] = oggetto)
+                    # Questo è quello che funziona nella versione Firefox
+                    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", cells[4])
+                    time.sleep(0.5)
+                    driver.execute_script("arguments[0].click();", cells[4])
+                    time.sleep(3)
 
                     # Attendi allegati
                     try:
                         wait.until(EC.presence_of_element_located((By.ID, ALLEGATI_PANEL_ID)))
                     except TimeoutException:
                         print(f"  ⚠ Panel allegati non trovato")
-                        torna_alla_lista(driver, wait, BACK_TAB_ID)
+                        torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
                         continue
 
-                    # CLICK sul primo PDF
-                    # XPath: //*[@id="allegati_pnl"]/div/ul/li/a/div[2]/span
-                    pdf_xpath = f"//*[@id='{ALLEGATI_PANEL_ID}']/div/ul/li/a/div[2]/span"
-                    pdf_trovato = False
+                    # Estrai i link dal panel allegati
                     try:
-                        pdf_link = wait.until(EC.element_to_be_clickable((By.XPATH, pdf_xpath)))
-                        print(f"  📥 Scaricando PDF...")
-                        pdf_link.click()
-                        time.sleep(4)
-                        
-                        # Leggi il PDF
-                        files = sorted(
-                            [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)],
-                            key=os.path.getmtime,
-                            reverse=True,
-                        )
-                        if files:
-                            with open(files[0], "rb") as f:
-                                pdf_bytes = f.read()
-                            print(f"  ✅ PDF scaricato ({len(pdf_bytes)} bytes)")
-                            yield numero_atto, data_pubb, oggetto, pdf_bytes
-                            os.remove(files[0])
-                            pdf_trovato = True
-                    except TimeoutException:
-                        print(f"  ⚠ PDF non trovato")
+                        allegati_panel = driver.find_element(By.ID, ALLEGATI_PANEL_ID)
+                        all_links = allegati_panel.find_elements(By.XPATH, ".//a")
+                        print(f"  📎 Trovati {len(all_links)} link")
                     except Exception as e:
-                        print(f"  ⚠ Errore scaricando PDF: {e}")
+                        print(f"  ⚠ Errore trovando link: {e}")
+                        torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
+                        continue
+
+                    # CERCA IL PRIMO PDF CON "(Originale)"
+                    pdf_trovato = False
+                    for link_idx, link in enumerate(all_links):
+                        try:
+                            text = link.text.strip() or ""
+                            text_clean = " ".join(text.split())
+                            
+                            # Controlla se è un PDF originale (non .p7m)
+                            is_original_pdf = "(Originale)" in text_clean and ".p7m" not in text_clean.lower()
+                            
+                            if is_original_pdf:
+                                print(f"  📥 PDF trovato: {text_clean[:60]}")
+                                
+                                # Scroll il link in vista
+                                driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
+                                time.sleep(0.5)
+                                
+                                # Click con JavaScript
+                                driver.execute_script("arguments[0].click();", link)
+                                time.sleep(4)
+                                
+                                # Leggi il PDF
+                                files = sorted(
+                                    [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)],
+                                    key=os.path.getmtime,
+                                    reverse=True,
+                                )
+                                if files:
+                                    with open(files[0], "rb") as f:
+                                        pdf_bytes = f.read()
+                                    print(f"  ✅ PDF scaricato ({len(pdf_bytes)} bytes)")
+                                    yield numero_atto, data_pubb, oggetto, pdf_bytes
+                                    os.remove(files[0])
+                                    pdf_trovato = True
+                                break
+                        except StaleElementReferenceException:
+                            print(f"    ⚠ Link stale (#{link_idx})")
+                            continue
+                        except Exception as e:
+                            print(f"    ⚠ Errore link {link_idx}: {e}")
+                            continue
+
+                    if not pdf_trovato:
+                        print(f"  ⚠ Nessun PDF originale trovato")
 
                     # Torna alla lista
-                    torna_alla_lista(driver, wait, BACK_TAB_ID)
+                    torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
 
                 except StaleElementReferenceException:
                     print(f"  ✗ Elemento stale")
-                    torna_alla_lista(driver, wait, BACK_TAB_ID)
+                    torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
                 except Exception as e:
                     print(f"  ✗ Errore: {e}")
-                    torna_alla_lista(driver, wait, BACK_TAB_ID)
+                    torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
 
             # Prossima pagina
             try:
@@ -193,14 +215,12 @@ def scarica_da(since: dt.date):
         print("\n✓ Browser chiuso")
 
 
-def torna_alla_lista(driver, wait, back_tab_id):
-    """Torna alla lista cliccando il pulsante indietro"""
+def torna_alla_lista(driver, wait, lista_btn_id):
+    """Torna alla lista"""
     try:
-        # Click su SVG dentro il tab header per tornare
-        svg_xpath = f"//*[@id='{back_tab_id}']/div/div/div/div[2]/svg"
-        back_btn = wait.until(EC.element_to_be_clickable((By.XPATH, svg_xpath)))
-        back_btn.click()
+        back_btn = wait.until(EC.element_to_be_clickable((By.ID, lista_btn_id)))
+        driver.execute_script("arguments[0].click();", back_btn)
         time.sleep(2)
     except Exception as e:
-        print(f"  ⚠ Errore tornando alla lista: {e}")
+        print(f"  ⚠ Errore tornando: {e}")
         time.sleep(1)
