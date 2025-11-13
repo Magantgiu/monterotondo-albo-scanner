@@ -1,17 +1,20 @@
 """
 core_scraper.py
 Scarica atti da albo Hypersic (Monterotondo) – solo cloud-ready.
-Pattern basato su versione Firefox funzionante
+Scarica TUTTI i PDF seguendo i reindirizzamenti getfile.aspx
 """
 import os
 import datetime as dt
 import time
+import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
+from urllib.parse import urlparse, parse_qs
+import io
 
 # ---------- CONFIG ----------
 TABLE_ID = "ctl00_ctl00_area_main_ContentPlaceHolderContenuto_albo_pretorio_container_tab_risultati_tab_risultati_table"
@@ -19,10 +22,39 @@ ALLEGATI_PANEL_ID = "ctl00_ctl00_area_main_ContentPlaceHolderContenuto_albo_pret
 LISTA_ATTI_BUTTON_ID = "tab_pnlnav_tab_risultati"
 # ----------------------------
 
+def get_pdf_from_getfile_url(driver, getfile_url: str) -> bytes:
+    """
+    Segue il reindirizzamento da getfile.aspx al PDF vero.
+    Estrae PARAM e KEY dall'URL e scarica il PDF.
+    """
+    try:
+        print(f"    🔗 Seguendo reindirizzamento: {getfile_url[:80]}...")
+        
+        # Usa requests per seguire i reindirizzamenti e ottenere il PDF
+        session = requests.Session()
+        
+        # Copia i cookie da Selenium a requests
+        for cookie in driver.get_cookies():
+            session.cookies.set(cookie['name'], cookie['value'])
+        
+        response = session.get(getfile_url, allow_redirects=True, timeout=30)
+        
+        if response.status_code == 200 and len(response.content) > 0:
+            print(f"    ✅ PDF scaricato ({len(response.content)} bytes)")
+            return response.content
+        else:
+            print(f"    ⚠ Risposta non valida: {response.status_code}")
+            return None
+    
+    except Exception as e:
+        print(f"    ⚠ Errore seguendo URL: {e}")
+        return None
+
 def scarica_da(since: dt.date):
     """
     Generatore: per ogni atto con data >= since restituisce
     (id, data, oggetto, pdf_bytes)
+    Scarica TUTTI i PDF allegati (esclusi .p7m)
     """
     options = Options()
     options.add_argument("--headless=new")
@@ -31,7 +63,7 @@ def scarica_da(since: dt.date):
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
-    # Download automatico PDF
+    # Download automatico PDF (se usato)
     tmp_dir = os.path.abspath("./tmp_pdf")
     os.makedirs(tmp_dir, exist_ok=True)
     options.add_experimental_option(
@@ -108,7 +140,7 @@ def scarica_da(since: dt.date):
                     oggetto = cells[4].text.strip()
                     
                     # Salta righe non valide
-                    if not numero_atto.isdigit() or "NOT.ART. 140 C.P.C." in oggetto or not data_atto:
+                    if not numero_atto.isdigit() or not data_atto:
                         continue
                     
                     try:
@@ -121,8 +153,7 @@ def scarica_da(since: dt.date):
 
                     print(f"🔍 Atto {numero_atto} ({data_pubb}): {oggetto[:50]}...")
 
-                    # CLICK direttamente sulla cella (cells[4] = oggetto)
-                    # Questo è quello che funziona nella versione Firefox
+                    # CLICK direttamente sulla cella
                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", cells[4])
                     time.sleep(0.5)
                     driver.execute_script("arguments[0].click();", cells[4])
@@ -140,70 +171,55 @@ def scarica_da(since: dt.date):
                     try:
                         allegati_panel = driver.find_element(By.ID, ALLEGATI_PANEL_ID)
                         all_links = allegati_panel.find_elements(By.XPATH, ".//a")
-                        print(f"  📎 Trovati {len(all_links)} link")
+                        print(f"  📎 Trovati {len(all_links)} allegati")
                     except Exception as e:
                         print(f"  ⚠ Errore trovando link: {e}")
                         torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
                         continue
 
-                    # CERCA IL PRIMO PDF (escludi .p7m e "(F.TO)")
-                    pdf_trovato = False
+                    # SCARICA TUTTI I PDF (escludi .p7m)
+                    allegati_scaricati = 0
                     for link_idx, link in enumerate(all_links):
                         try:
                             text = link.text.strip() or ""
                             text_clean = " ".join(text.split())
                             
-                            # Controlla se è un PDF valido:
-                            # - Non deve contenere ".p7m"
-                            # - Non deve contenere "(F.TO)"
-                            is_valid_pdf = (
-                                ".p7m" not in text_clean.lower() and
-                                "(F.TO)" not in text_clean
-                            )
+                            # Salta i file .p7m
+                            if ".p7m" in text_clean.lower():
+                                print(f"  ⏭ Saltato: {text_clean[:50]} (.p7m)")
+                                continue
                             
-                            if is_original_pdf:
-                                print(f"  📥 PDF trovato: {text_clean[:60]}")
-                                
-                                # Conta i file attuali per verificare il download
-                                files_before = set(os.listdir(tmp_dir))
-                                
-                                # Scroll il link in vista
-                                driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
-                                time.sleep(0.5)
-                                
-                                # Click con JavaScript
-                                driver.execute_script("arguments[0].click();", link)
-                                time.sleep(4)
-                                
-                                # Verifica che il file sia stato scaricato
-                                files_after = set(os.listdir(tmp_dir))
-                                new_files = files_after - files_before
-                                
-                                if new_files:
-                                    filepath = os.path.join(tmp_dir, list(new_files)[0])
-                                    with open(filepath, "rb") as f:
-                                        pdf_bytes = f.read()
-                                    
-                                    if len(pdf_bytes) > 0:
-                                        print(f"  ✅ PDF scaricato ({len(pdf_bytes)} bytes)")
-                                        yield numero_atto, data_pubb, oggetto, pdf_bytes
-                                        os.remove(filepath)
-                                        pdf_trovato = True
-                                    else:
-                                        print(f"    ⚠ File vuoto, provo il prossimo link")
-                                    break
-                                else:
-                                    print(f"    ⚠ Download non riuscito, provo il prossimo link")
-                                    continue
+                            # Ottieni l'href del link
+                            href = link.get_attribute("href") or ""
+                            
+                            if not href:
+                                print(f"  ⚠ Link {link_idx}: nessun href")
+                                continue
+                            
+                            # Costruisci l'URL completo se relativo
+                            if href.startswith("http"):
+                                full_url = href
+                            else:
+                                full_url = f"https://servizionline.hspromilaprod.hypersicapp.net{href}"
+                            
+                            print(f"  📥 [{link_idx+1}] {text_clean[:60]}...")
+                            print(f"      URL: {full_url[:80]}...")
+                            
+                            # Scarica il PDF seguendo il reindirizzamento
+                            pdf_bytes = get_pdf_from_getfile_url(driver, full_url)
+                            
+                            if pdf_bytes and len(pdf_bytes) > 0:
+                                yield numero_atto, data_pubb, oggetto, pdf_bytes
+                                allegati_scaricati += 1
+                            
                         except StaleElementReferenceException:
-                            print(f"    ⚠ Link stale (#{link_idx})")
+                            print(f"  ⚠ Link stale (#{link_idx})")
                             continue
                         except Exception as e:
-                            print(f"    ⚠ Errore link {link_idx}: {e}")
+                            print(f"  ⚠ Errore link {link_idx}: {e}")
                             continue
 
-                    if not pdf_trovato:
-                        print(f"  ⚠ Nessun PDF originale trovato")
+                    print(f"  ✅ Allegati scaricati per questo atto: {allegati_scaricati}")
 
                     # Torna alla lista
                     torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
