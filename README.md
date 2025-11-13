@@ -9,6 +9,6 @@ Un bot civico open-source che ogni giorno:
     scarica solo gli atti nuovi (PDF originali)
     li archivia su Google Cloud Storage (pubblici)
     scrive i metadati su Supabase (aperto)
-    genera bozze pronte per Facebook (Make.com + OpenAI) – review manuale
+    genera bozze pronte per Facebook (Gemini) – review manuale
 
 Tutto gratis (free-tier) e trasparente: il codice, i log e i dati sono pubblici.
