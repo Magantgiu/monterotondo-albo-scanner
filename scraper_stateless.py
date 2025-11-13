@@ -72,9 +72,9 @@ def save_to_cloud(pdf_bytes: bytes, atto_id: str, data_pubb: dt.date, oggetto: s
         print(f"  📤 Uploading to GCS: {blob_path}...")
         blob.upload_from_string(pdf_bytes, content_type="application/pdf")
         
-        # Rendi il blob pubblicamente leggibile
-        blob.make_public()
-        public_url = blob.public_url
+        # NON usiamo blob.make_public() se il bucket ha uniform access
+        # Generiamo l'URL pubblico direttamente
+        public_url = f"https://storage.googleapis.com/{GCS_BUCKET}/{blob_path}"
         print(f"  ✅ Upload completato: {public_url}")
         
         # Salva metadati su Supabase
