@@ -146,18 +146,26 @@ def scarica_da(since: dt.date):
                         torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
                         continue
 
-                    # CERCA IL PRIMO PDF CON "(Originale)"
+                    # CERCA IL PRIMO PDF (escludi .p7m e "(F.TO)")
                     pdf_trovato = False
                     for link_idx, link in enumerate(all_links):
                         try:
                             text = link.text.strip() or ""
                             text_clean = " ".join(text.split())
                             
-                            # Controlla se è un PDF originale (non .p7m)
-                            is_original_pdf = "(Originale)" in text_clean and ".p7m" not in text_clean.lower()
+                            # Controlla se è un PDF valido:
+                            # - Non deve contenere ".p7m"
+                            # - Non deve contenere "(F.TO)"
+                            is_valid_pdf = (
+                                ".p7m" not in text_clean.lower() and
+                                "(F.TO)" not in text_clean
+                            )
                             
                             if is_original_pdf:
                                 print(f"  📥 PDF trovato: {text_clean[:60]}")
+                                
+                                # Conta i file attuali per verificare il download
+                                files_before = set(os.listdir(tmp_dir))
                                 
                                 # Scroll il link in vista
                                 driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", link)
@@ -167,20 +175,26 @@ def scarica_da(since: dt.date):
                                 driver.execute_script("arguments[0].click();", link)
                                 time.sleep(4)
                                 
-                                # Leggi il PDF
-                                files = sorted(
-                                    [os.path.join(tmp_dir, f) for f in os.listdir(tmp_dir)],
-                                    key=os.path.getmtime,
-                                    reverse=True,
-                                )
-                                if files:
-                                    with open(files[0], "rb") as f:
+                                # Verifica che il file sia stato scaricato
+                                files_after = set(os.listdir(tmp_dir))
+                                new_files = files_after - files_before
+                                
+                                if new_files:
+                                    filepath = os.path.join(tmp_dir, list(new_files)[0])
+                                    with open(filepath, "rb") as f:
                                         pdf_bytes = f.read()
-                                    print(f"  ✅ PDF scaricato ({len(pdf_bytes)} bytes)")
-                                    yield numero_atto, data_pubb, oggetto, pdf_bytes
-                                    os.remove(files[0])
-                                    pdf_trovato = True
-                                break
+                                    
+                                    if len(pdf_bytes) > 0:
+                                        print(f"  ✅ PDF scaricato ({len(pdf_bytes)} bytes)")
+                                        yield numero_atto, data_pubb, oggetto, pdf_bytes
+                                        os.remove(filepath)
+                                        pdf_trovato = True
+                                    else:
+                                        print(f"    ⚠ File vuoto, provo il prossimo link")
+                                    break
+                                else:
+                                    print(f"    ⚠ Download non riuscito, provo il prossimo link")
+                                    continue
                         except StaleElementReferenceException:
                             print(f"    ⚠ Link stale (#{link_idx})")
                             continue
