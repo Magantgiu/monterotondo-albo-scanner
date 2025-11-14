@@ -3,45 +3,75 @@
 Cloud-ready wrapper:
 - legge ultima data da Supabase
 - scarica solo nuovi atti via core_scraper.scarica_da()
-- upload PDF → GCS
-- scrive metadati → Supabase
+- upload PDF → Google Drive (per Apps Script)
+- scrive metadati → Supabase (opzionale)
 """
 import os
 import datetime as dt
-import json
+import io
 from supabase import create_client, Client
-from google.cloud import storage
-from google.oauth2 import service_account
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseUpload
 
 # ---------- ENV ----------
-ALBO_URL     = os.getenv("ALBO_URL")
 SUP_URL      = os.getenv("SUPABASE_URL")
 SUP_KEY      = os.getenv("SUPABASE_ANON_KEY")
-GCS_BUCKET   = os.getenv("GCS_BUCKET")
-GCS_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")  # Path al JSON oppure JSON diretto
+DRIVE_FOLDER_ID = os.getenv("DRIVE_FOLDER_ID")  # Cartella dove mettere i PDF
 # -------------------------
 
-def get_gcs_client():
-    """Crea il client GCS con autenticazione corretta."""
+def get_drive_service():
+    """Autentica con Google Drive usando service account"""
     try:
-        # Metodo 1: Se GOOGLE_APPLICATION_CREDENTIALS è un file path
-        if GCS_CREDENTIALS and os.path.isfile(GCS_CREDENTIALS):
-            print(f"📋 Usando credenziali da file: {GCS_CREDENTIALS}")
-            return storage.Client()
+        # Usa il file service_account.json (quello che hai nel repo)
+        creds = Credentials.from_service_account_file(
+            'gcs-key.json',
+            scopes=['https://www.googleapis.com/auth/drive.file']
+        )
+        service = build('drive', 'v3', credentials=creds)
+        print(f"📁 Google Drive autenticato")
+        return service
+    except Exception as e:
+        print(f"❌ Errore autenticazione Drive: {e}")
+        raise
+
+def upload_to_drive(service, pdf_bytes: bytes, numero_atto: str, data_pubb: dt.date) -> str:
+    """Upload PDF a Google Drive e ritorna il link"""
+    try:
+        # Crea il nome file
+        filename = f"{numero_atto}_{data_pubb.isoformat()}.pdf"
         
-        # Metodo 2: Se GOOGLE_APPLICATION_CREDENTIALS è il JSON diretto
-        if GCS_CREDENTIALS:
-            creds_dict = json.loads(GCS_CREDENTIALS)
-            credentials = service_account.Credentials.from_service_account_info(creds_dict)
-            print(f"📋 Usando credenziali da env JSON")
-            return storage.Client(credentials=credentials)
+        # Prepara il file
+        file_metadata = {
+            'name': filename,
+            'parents': [DRIVE_FOLDER_ID],
+            'mimeType': 'application/pdf'
+        }
         
-        # Metodo 3: Fallback a credenziali default (ADC - Application Default Credentials)
-        print(f"📋 Usando Application Default Credentials")
-        return storage.Client()
+        media = MediaIoBaseUpload(
+            io.BytesIO(pdf_bytes),
+            mimetype='application/pdf',
+            resumable=True
+        )
+        
+        print(f"  📤 Uploading a Drive: {filename}...")
+        
+        # Upload
+        file = service.files().create(
+            body=file_metadata,
+            media_body=media,
+            fields='id, webViewLink'
+        ).execute()
+        
+        file_id = file.get('id')
+        file_link = file.get('webViewLink')
+        
+        print(f"  ✅ PDF su Drive: {file_link}")
+        
+        return file_link
     
     except Exception as e:
-        print(f"❌ Errore creando GCS client: {e}")
+        print(f"  ❌ Errore upload Drive: {e}")
         raise
 
 def last_check_date() -> dt.date:
@@ -60,58 +90,41 @@ def last_check_date() -> dt.date:
         print(f"⚠ Errore leggendo da Supabase: {e}")
         return dt.date(2025, 11, 1)
 
-def save_to_cloud(pdf_bytes: bytes, atto_id: str, data_pubb: dt.date, oggetto: str) -> str:
-    """Upload PDF su GCS e salva metadati su Supabase."""
+def save_metadata_to_supabase(numero_atto: str, data_pubb: dt.date, 
+                              oggetto: str, drive_link: str):
+    """Salva metadati in Supabase (opzionale)"""
     try:
-        # Upload su GCS
-        gcs = get_gcs_client()
-        bucket = gcs.bucket(GCS_BUCKET)
-        blob_path = f"{data_pubb:%Y/%m}/{atto_id}.pdf"
-        blob = bucket.blob(blob_path)
-        
-        print(f"  📤 Uploading to GCS: {blob_path}...")
-        blob.upload_from_string(pdf_bytes, content_type="application/pdf")
-        
-        # NON usiamo blob.make_public() se il bucket ha uniform access
-        # Generiamo l'URL pubblico direttamente
-        public_url = f"https://storage.googleapis.com/{GCS_BUCKET}/{blob_path}"
-        print(f"  ✅ Upload completato: {public_url}")
-        
-        # Salva metadati su Supabase
         sup = create_client(SUP_URL, SUP_KEY)
         record = {
-            "id": atto_id,
+            "id": numero_atto,
             "data_pubb": data_pubb.isoformat(),
             "oggetto": oggetto,
-            "pdf_url": public_url,
-            "status": "new"
+            "pdf_url": drive_link,
+            "status": "nuovo"
         }
         
         sup.table("atti").insert(record, upsert=True).execute()
-        print(f"  ✅ Metadati salvati su Supabase")
+        print(f"  ✅ Metadati salvati in Supabase")
         
-        return public_url
-    
     except Exception as e:
-        print(f"  ❌ Errore: {e}")
-        raise
+        print(f"  ⚠ Errore salvando metadati: {e}")
 
 # ---------- MAIN ----------
 if __name__ == "__main__":
     print("🚀 Inizio scaricamento atti...\n")
     
     # Validazione env
-    if not all([SUP_URL, SUP_KEY, GCS_BUCKET]):
+    if not all([SUP_URL, SUP_KEY, DRIVE_FOLDER_ID]):
         print("❌ Variabili d'ambiente mancanti:")
         print(f"   SUPABASE_URL: {SUP_URL}")
         print(f"   SUPABASE_ANON_KEY: {'***' if SUP_KEY else 'MANCANTE'}")
-        print(f"   GCS_BUCKET: {GCS_BUCKET}")
+        print(f"   DRIVE_FOLDER_ID: {DRIVE_FOLDER_ID}")
         exit(1)
     
-    if not GCS_CREDENTIALS:
-        print("⚠ GOOGLE_APPLICATION_CREDENTIALS non impostato, userò ADC...")
-    
     try:
+        # Ottieni il servizio Drive
+        drive_service = get_drive_service()
+        
         since = last_check_date()
         print(f"🔍 Scaricando atti dal {since}\n")
         
@@ -125,15 +138,20 @@ if __name__ == "__main__":
                 print(f"     📝 {oggetto[:70]}")
                 print(f"     📦 {len(pdf_bytes)} bytes")
                 
-                url = save_to_cloud(pdf_bytes, atto_id, data_pubb, oggetto)
-                print(f"     ✅ Salvato: {url}")
+                # Upload a Google Drive
+                drive_link = upload_to_drive(drive_service, pdf_bytes, atto_id, data_pubb)
+                
+                # Salva metadati in Supabase
+                save_metadata_to_supabase(atto_id, data_pubb, oggetto, drive_link)
+                
+                print(f"     ✅ Completato!")
             
             except Exception as e:
-                print(f"     ❌ Errore salvando: {e}")
+                print(f"     ❌ Errore: {e}")
                 continue
         
         print(f"\n{'='*60}")
-        print(f"🎉 Completato! Scaricati {count} atti")
+        print(f"🎉 Completato! Scaricati {count} atti su Drive")
         print(f"{'='*60}")
     
     except Exception as e:
