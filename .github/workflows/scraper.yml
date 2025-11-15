@@ -23,11 +23,10 @@ jobs:
 
       - name: Run scraper
         env:
-          ALBO_URL:        ${{ secrets.ALBO_URL }}
-          SUPABASE_URL:    ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_KEY }}
-          GCS_BUCKET:      ${{ secrets.GCS_BUCKET }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcs-key.json
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+          ALBO_URL: ${{ secrets.ALBO_URL }}
         run: |
           echo '${{ secrets.GCS_SA_KEY }}' > gcs-key.json
           python scraper_stateless.py
