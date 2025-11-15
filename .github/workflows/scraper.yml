@@ -24,6 +24,14 @@ jobs:
       - name: Setup GCS Key
         run: echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
 
+      - name: Commit PDF files
+        run: |
+          git config --global user.email "bot@example.com"
+          git config --global user.name "Bot Scraper"
+          git add pdfs/
+          git commit -m "📄 Nuovi PDF $(date +%Y-%m-%d)" || true
+          git push
+
       - name: Run scraper
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
