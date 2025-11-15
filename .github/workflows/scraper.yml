@@ -26,7 +26,6 @@ jobs:
 
       - name: Commit PDF files
         run: |
-          mkdir -p pdfs
           git config --global user.email "bot@example.com"
           git config --global user.name "Bot Scraper"
           git add pdfs/
