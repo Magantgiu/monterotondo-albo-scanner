@@ -21,13 +21,13 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: Setup GCS Key
+        run: echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
+
       - name: Run scraper
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
           ALBO_URL: ${{ secrets.ALBO_URL }}
-      - name: Setup GCS Key
-        run: |
-          echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
-          python scraper_stateless.py
+        run: python scraper_stateless.py
