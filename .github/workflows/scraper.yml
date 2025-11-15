@@ -27,6 +27,7 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
           ALBO_URL: ${{ secrets.ALBO_URL }}
+      - name: Setup GCS Key
         run: |
-          echo '${{ secrets.GCS_SA_KEY }}' > gcs-key.json
+          echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
           python scraper_stateless.py
