@@ -28,7 +28,10 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "📄 Nuovi PDF scaricati"
-          file_pattern: pdfs/
+          file_pattern: pdfs/**/*.pdf
+          commit_options: '--no-verify'
+          skip_fetch: false
+          skip_checkout: false
 
       - name: Run scraper
         env:
