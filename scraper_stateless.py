@@ -16,7 +16,7 @@ from googleapiclient.http import MediaIoBaseUpload
 
 # ---------- ENV ----------
 SUP_URL      = os.getenv("SUPABASE_URL")
-SUP_KEY      = os.getenv("SUPABASE_ANON_KEY")
+SUP_KEY      = os.getenv("SUPABASE_KEY")
 DRIVE_FOLDER_ID = os.getenv("DRIVE_FOLDER_ID")  # Cartella dove mettere i PDF
 # -------------------------
 
