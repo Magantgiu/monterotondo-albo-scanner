@@ -25,14 +25,10 @@ jobs:
         run: echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
 
       - name: Commit PDF files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.email "bot@example.com"
-          git config --global user.name "Bot Scraper"
-          git add pdfs/
-          git commit -m "📄 Nuovi PDF $(date +%Y-%m-%d)" || true
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📄 Nuovi PDF scaricati"
+          file_pattern: pdfs/
 
       - name: Run scraper
         env:
