@@ -41,7 +41,8 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add -A
+          git rm --cached gcs-key.json 2>/dev/null || true
+          git add pdfs/
           git commit -m "📄 PDF $(date +%Y-%m-%d_%H:%M:%S)" || echo "No changes"
           git push origin main
         env:
