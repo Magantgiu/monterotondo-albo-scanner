@@ -1,42 +1,46 @@
 name: Scraping Albo – Chrome headless
-
 on:
   schedule:
     - cron: "0 6,18 * * *"   # 6:00 e 18:00 UTC
   workflow_dispatch:
-
 jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
+      
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
+      
       - uses: browser-actions/setup-chrome@v2
         with:
           install-chromedriver: true
-
+      
       - run: pip install -r requirements.txt
-
+      
       - name: Setup GCS Key
         run: echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
-
-      - name: Commit PDF files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "📄 Nuovi PDF scaricati"
-          file_pattern: pdfs/**/*.pdf
-          commit_options: '--no-verify'
-          skip_fetch: false
-          skip_checkout: false
-
+      
       - name: Run scraper
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
           ALBO_URL: ${{ secrets.ALBO_URL }}
         run: python scraper_stateless.py
+      
+      - name: Debug - Check files
+        run: |
+          echo "=== Directory structure ==="
+          find pdfs -type f 2>/dev/null | head -20 || echo "No pdfs folder"
+          echo ""
+          echo "=== Git status ==="
+          git status
+      
+      - name: Push PDF files to GitHub
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add -A
+          git commit -m "📄 PDF $(date +%Y-%m-%d_%H:%M:%S)" || echo "No changes"
+          git push
