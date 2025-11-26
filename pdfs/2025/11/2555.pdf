@@ -1,0 +1,606 @@
+
+
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+
+    <!-- REQUIRED META TAG -->
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /><link rel="shortcut icon" href="/cmsmonterotondo/getimg.aspx?SOURCE=APPLICATION&KEY=WSDN_FAVICON&OUTPUT=PNG" type="image/png" />
+
+    <!-- BEGIN AREA SEO -->
+    
+            <title>Servizi online - Comune di Monterotondo - Comune di Monterotondo</title>
+            <meta name="description" content="Descrizione da compilare" />
+        <script type="application/ld+json">
+	{ "@context": "https://schema.org", "@type": "WebSite", "url": "https://servizionline.hspromilaprod.hypersicapp.net/","potentialAction": { "target": { "@type": "EntryPoint", "urlTemplate": "https://servizionline.hspromilaprod.hypersicapp.net/ricerca.aspx?txt={search_term_string}" }, "query-input": "required name = search_term_string" } }
+</script>
+    <!-- END AREA SEO -->
+
+    <!-- STILI FISSI DEL TEMPLATE -->
+    <link type="text/css" href="/cmsmonterotondo/assets/externals/bootstrap-italia.min.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/externals/font-awesome-5.14.min.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/externals/font-awesome-4.7.min.css" rel="stylesheet" />
+
+    <!-- TEMA DI COLORI -->
+    <link id="ctl00_cssTheme" rel="stylesheet" type="text/css" href="/cmsmonterotondo/assets/themes/apk-theme.css" />
+
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/custom.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/apkbootstrap.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/apkcontainers.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/apkform.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/apktab.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/apkoutputs.css" rel="stylesheet" />
+    <link type="text/css" href="/cmsmonterotondo/assets/styles/apkinputs.css" rel="stylesheet" />
+
+    </head>
+<body>
+    <div class="loader_container">
+        <div class="loader"></div>
+    </div>
+    
+    <section class="cookiebar fade" aria-label="Gestione dei cookies">
+      <p>Cookie<br />
+        Questo sito utilizza cookie tecnici, analytics e di terze parti. 
+          Proseguendo nella navigazione accetti l'utilizzo dei cookie. Per maggiori informazioni consulta la <a href="http://www.comune.monterotondo.rm.it/adempimenti-normativi/privacy/" id="ctl00_lnkCookiePolicy" target="_blank" rel="noopener noreferrer">Cookie Policy</a></p>
+      <div class="cookiebar-buttons">
+        
+        <button data-bs-accept="cookiebar" title="Accetto i cookies" class="cookiebar-btn cookiebar-confirm">Accetto<span class="visually-hidden"> i cookies</span></button>
+      </div>
+    </section>
+    <button aria-hidden="true" data-bs-toggle="backtotop" class="back-to-top shadow " title="Torna in cima alla pagina">
+        <svg class="icon icon-white align-middle" aria-hidden="true" focusable="false" style="top: 0 !important">
+            <title>Torna in cima alla pagina</title>
+            <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-arrow-up"
+                xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-arrow-up"></use></svg>
+        <span class="visually-hidden sr-only">Torna su</span>
+    </button>
+
+    
+    <form name="aspnetForm" method="post" action="./digitalsignviewer.aspx" id="aspnetForm" class="needs-validation" enctype="multipart/form-data">
+<input type="hidden" name="__AntiXsrfToken" id="__AntiXsrfToken" value="bf6779ea23b94b53a67e08a58265358a" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE5MTkzOTgzMjkPZBYCZg8PFgweD19fQW50aVhzcmZUb2tlbgUgYmY2Nzc5ZWEyM2I5NGI1M2E2N2UwOGE1ODI2NTM1OGEeEl9fQW50aVhzcmZVc2VyTmFtZQUYcDB1ZWJjanV0NWUwMmtqcjFqZWZjNWZpHgpVUkxfUEFHSU5BBRZkaWdpdGFsc2lnbnZpZXdlci5hc3B4HhBBUElfU0VNUExJQ0VfS0VZZR4UQVBJX1NFTVBMSUNFX0lTX1RFU1RoHgxMT0dfSlNfTEVWRUxmZBYUZg9kFggCAg8WAh4EVGV4dAWAATxsaW5rIHJlbD0ic2hvcnRjdXQgaWNvbiIgaHJlZj0iL2Ntc21vbnRlcm90b25kby9nZXRpbWcuYXNweD9TT1VSQ0U9QVBQTElDQVRJT04mS0VZPVdTRE5fRkFWSUNPTiZPVVRQVVQ9UE5HIiB0eXBlPSJpbWFnZS9wbmciIC8+ZAIEDxYCHgtfIUl0ZW1Db3VudAIBFgJmD2QWAmYPFQJAU2Vydml6aSBvbmxpbmUgLSBDb211bmUgZGkgTW9udGVyb3RvbmRvIC0gQ29tdW5lIGRpIE1vbnRlcm90b25kbxhEZXNjcml6aW9uZSBkYSBjb21waWxhcmVkAgUPFgIfBgWCAzxzY3JpcHQgdHlwZT0iYXBwbGljYXRpb24vbGQranNvbiI+Cgl7ICJAY29udGV4dCI6ICJodHRwczovL3NjaGVtYS5vcmciLCAiQHR5cGUiOiAiV2ViU2l0ZSIsICJ1cmwiOiAiaHR0cHM6Ly9zZXJ2aXppb25saW5lLmhzcHJvbWlsYXByb2QuaHlwZXJzaWNhcHAubmV0LyIsInBvdGVudGlhbEFjdGlvbiI6IHsgInRhcmdldCI6IHsgIkB0eXBlIjogIkVudHJ5UG9pbnQiLCAidXJsVGVtcGxhdGUiOiAiaHR0cHM6Ly9zZXJ2aXppb25saW5lLmhzcHJvbWlsYXByb2QuaHlwZXJzaWNhcHAubmV0L3JpY2VyY2EuYXNweD90eHQ9e3NlYXJjaF90ZXJtX3N0cmluZ30iIH0sICJxdWVyeS1pbnB1dCI6ICJyZXF1aXJlZCBuYW1lID0gc2VhcmNoX3Rlcm1fc3RyaW5nIiB9IH0KPC9zY3JpcHQ+ZAIGDxYCHgRocmVmBSwvY21zbW9udGVyb3RvbmRvL2Fzc2V0cy90aGVtZXMvYXBrLXRoZW1lLmNzc2QCAQ8WAh8IBUNodHRwOi8vd3d3LmNvbXVuZS5tb250ZXJvdG9uZG8ucm0uaXQvYWRlbXBpbWVudGktbm9ybWF0aXZpL3ByaXZhY3kvZAICD2QWQgIBDw8WAh4LTmF2aWdhdGVVcmwFJWh0dHA6Ly93d3cuY29tdW5lLm1vbnRlcm90b25kby5ybS5pdC8WAh4DcmVsBRNub29wZW5lciBub3JlZmVycmVyZAICDxYCHgdWaXNpYmxlaGQCAw9kFgRmDw8WAh8LaGQWCGYPDxYCHwZkZGQCAQ8WAh8IBSMvY21zbW9udGVyb3RvbmRvL3Byb2ZpbG91dGVudGUuYXNweGQCAg8WBB8IZB8LaGQCAw8WAh8IBRwvY21zbW9udGVyb3RvbmRvL0xvZ091dC5hc3B4FgJmDw8WAh8GBQRFU0NJZGQCAg9kFgICAQ8WAh8IBR8uL2VsZW5jb3NlcnZpemkuYXNweD9sb2dpbj10cnVlFgJmDw8WAh8GBQZBQ0NFRElkZAIEDw8WAh4ISW1hZ2VVcmwFUS9jbXNtb250ZXJvdG9uZG8vZ2V0aW1nLmFzcHg/U09VUkNFPUFQUExJQ0FUSU9OJktFWT1XU0ROX1NURU1NQV9IRUFERVImT1VUUFVUPVBORxYGHgNhbHQFD2xvZ28gZGVsIGNvbXVuZR4FdGl0bGUFFkNvbXVuZSBkaSBNb250ZXJvdG9uZG8eD2FyaWEtbGFiZWxsZWRieQUOZ290b2hvbWVoZWFkZXJkAgUPDxYCHwwFUS9jbXNtb250ZXJvdG9uZG8vZ2V0aW1nLmFzcHg/U09VUkNFPUFQUExJQ0FUSU9OJktFWT1XU0ROX1NURU1NQV9GT09URVImT1VUUFVUPVBORxYIHw0FD2xvZ28gZGVsIGNvbXVuZR8OBRZDb211bmUgZGkgTW9udGVyb3RvbmRvHw8FDmdvdG9ob21laGVhZGVyHgVzdHlsZQUNZGlzcGxheTpub25lO2QCBg8WAh8GBRZDb211bmUgZGkgTW9udGVyb3RvbmRvZAIHDxYCHwYFDE1vbnRlcm90b25kb2QCCA8WAh8LaGQCCw8WAh8HAgMWBmYPZBYCZg8VBgAAACUvY21zbW9udGVyb3RvbmRvL2xpc3RhdXRlbnRpLmFzcHg/VT0xAAlDaXR0YWRpbmlkAgEPZBYCZg8VBgAAACUvY21zbW9udGVyb3RvbmRvL2xpc3RhdXRlbnRpLmFzcHg/VT0yAAdJbXByZXNlZAICD2QWAmYPFQYAAAAlL2Ntc21vbnRlcm90b25kby9saXN0YXV0ZW50aS5hc3B4P1U9MwAKQWx0cmkgRW50aWQCDA8PFgIfCQUlaHR0cDovL3d3dy5jb211bmUubW9udGVyb3RvbmRvLnJtLml0LxYCHwoFE25vb3BlbmVyIG5vcmVmZXJyZXJkAg0PFgQfCAUjL2Ntc21vbnRlcm90b25kby9lbGVuY29zZXJ2aXppLmFzcHgeBnRhcmdldGRkAg4PDxYKHhticmVhZGNydW1iX2NvbXBvbmVudF9MRVZFTFMy2g4AAQAAAP////8BAAAAAAAAAAQBAAAAgQJTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5EaWN0aW9uYXJ5YDJbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV0sW0h5cGVyU2ljUG9ydGFsLkNvbW1vbnMuQVBLQnJlYWRjcnVtYkxldmVsLCBIeXBlclNpY1BvcnRhbC5Db21tb25zLCBWZXJzaW9uPTkuMi4wLjU3LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQQAAAAHVmVyc2lvbghDb21wYXJlcghIYXNoU2l6ZQ1LZXlWYWx1ZVBhaXJzAAMAAwiSAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkdlbmVyaWNFcXVhbGl0eUNvbXBhcmVyYDFbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dCIUCU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuS2V5VmFsdWVQYWlyYDJbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV0sW0h5cGVyU2ljUG9ydGFsLkNvbW1vbnMuQVBLQnJlYWRjcnVtYkxldmVsLCBIeXBlclNpY1BvcnRhbC5Db21tb25zLCBWZXJzaW9uPTkuMi4wLjU3LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXVtdAgAAAAkCAAAAAwAAAAkDAAAABAIAAACSAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkdlbmVyaWNFcXVhbGl0eUNvbXBhcmVyYDFbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dAAAAAAcDAAAAAAEAAAACAAAAA4MCU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuS2V5VmFsdWVQYWlyYDJbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV0sW0h5cGVyU2ljUG9ydGFsLkNvbW1vbnMuQVBLQnJlYWRjcnVtYkxldmVsLCBIeXBlclNpY1BvcnRhbC5Db21tb25zLCBWZXJzaW9uPTkuMi4wLjU3LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQwFAAAATkh5cGVyU2ljUG9ydGFsLkNvbW1vbnMsIFZlcnNpb249OS4yLjAuNTcsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbAT8////gwJTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5LZXlWYWx1ZVBhaXJgMltbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XSxbSHlwZXJTaWNQb3J0YWwuQ29tbW9ucy5BUEtCcmVhZGNydW1iTGV2ZWwsIEh5cGVyU2ljUG9ydGFsLkNvbW1vbnMsIFZlcnNpb249OS4yLjAuNTcsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dAgAAAANrZXkFdmFsdWUBBClIeXBlclNpY1BvcnRhbC5Db21tb25zLkFQS0JyZWFkY3J1bWJMZXZlbAUAAAAGBgAAAAxob21lX3NlcnZpemkJBwAAAAH4/////P///wYJAAAABGhvbWUJCgAAAAUHAAAAKUh5cGVyU2ljUG9ydGFsLkNvbW1vbnMuQVBLQnJlYWRjcnVtYkxldmVsBQAAAANrZXkFdGl0bGUEaHJlZgppc0V4dGVybmFsBnRhcmdldAEBAQABAQUAAAAJBgAAAAYMAAAADlNlcnZpemkgb25saW5lBg0AAAARL2Ntc21vbnRlcm90b25kby8ABg4AAAAAAQoAAAAHAAAACQkAAAAGEAAAAARIb21lBhEAAAAlaHR0cDovL3d3dy5jb211bmUubW9udGVyb3RvbmRvLnJtLml0LwEGEgAAAAZfYmxhbmsLHh9icmVhZGNydW1iX2NvbXBvbmVudF9MRVZFTF9TT1JUMuoBAAEAAAD/////AQAAAAAAAAAEAQAAAH9TeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5MaXN0YDFbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dAwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24GAAAICAkCAAAAAgAAAAIAAAARAgAAAAQAAAAGAwAAAARob21lBgQAAAAMaG9tZV9zZXJ2aXppDQILHh5icmVhZGNydW1iX2NvbXBvbmVudF9JRF9VVEVOVEUC/////w8eIGJyZWFkY3J1bWJfY29tcG9uZW50X0lEX1NFUlZJWklPAv////8PHh5icmVhZGNydW1iX2NvbXBvbmVudF9JRF9QQUdJTkEC/////w9kZAIPD2QWAgIBD2QWCgIBDw8WAh8GBRgxMDg0XzAwMl9HTl85NTA5LnBkZi5wN21kZAIDDw8WBh8GBTxGaXJtYSBDQURFUyB2YWxpZGEuIERhdGEgVmVyaWZpY2E6IDI2LzExLzIwMjUgMTg6MjU6MTIgKFVUQykeCUZvcmVDb2xvcgpPHgRfIVNCAgRkZAIFDxYCHwcCARYCAgEPZBYCZg8VBhMyNi8xMS8yMDI1IDEzOjEwOjM5BWdyZWVuEkZpcm1hIENBREVTIHZhbGlkYRJNaWNoZWxlIFNtYXJnaWFzc2koQXJ1YmFQRUMgRVUgUXVhbGlmaWVkIENlcnRpZmljYXRlcyBDQSBHMSYxNDc3NTY5MTY3MjIzNTQ3MDc2ODA0OTI1MjYwNDQwODcxMzc5N2QCBw8PFgIfCQVhZ2V0ZmlsZS5hc3B4P1A3TVY9MCZTT1VSQ0U9U0VTU0lPTiZLRVk9QVBTLlA3TVZpZXdlci5TaWduZWQmTk9NRUFMTEVHQVRPPTEwODRfMDAyX0dOXzk1MDkucGRmLnA3bWRkAgkPDxYCHwkFVWdldGZpbGUuYXNweD9TT1VSQ0U9U0VTU0lPTiZLRVk9QVBTUDdNVklFV0VSQ09OVEVOVCZOT01FQUxMRUdBVE89MTA4NF8wMDJfR05fOTUwOS5wZGZkZAIQDxYCHwtoFgJmDw8WBh4ZZm9ybV92YWx1dGF6aW9uZV9GSUVMRFNFVDLIDQABAAAA/////wEAAAAAAAAABAEAAACBAlN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkRpY3Rpb25hcnlgMltbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XSxbSHlwZXJTaWNQb3J0YWwuQ29tbW9ucy5BUEtGb3JtUmF3RmllbGRzZXQsIEh5cGVyU2ljUG9ydGFsLkNvbW1vbnMsIFZlcnNpb249OS4yLjAuNTcsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dBAAAAAdWZXJzaW9uCENvbXBhcmVyCEhhc2hTaXplDUtleVZhbHVlUGFpcnMAAwADCJIBU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuR2VuZXJpY0VxdWFsaXR5Q29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0IhQJTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5LZXlWYWx1ZVBhaXJgMltbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XSxbSHlwZXJTaWNQb3J0YWwuQ29tbW9ucy5BUEtGb3JtUmF3RmllbGRzZXQsIEh5cGVyU2ljUG9ydGFsLkNvbW1vbnMsIFZlcnNpb249OS4yLjAuNTcsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dW10BAAAACQIAAAADAAAACQMAAAAEAgAAAJIBU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuR2VuZXJpY0VxdWFsaXR5Q29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0AAAAABwMAAAAAAQAAAAEAAAADgwJTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5LZXlWYWx1ZVBhaXJgMltbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XSxbSHlwZXJTaWNQb3J0YWwuQ29tbW9ucy5BUEtGb3JtUmF3RmllbGRzZXQsIEh5cGVyU2ljUG9ydGFsLkNvbW1vbnMsIFZlcnNpb249OS4yLjAuNTcsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbF1dDAUAAABOSHlwZXJTaWNQb3J0YWwuQ29tbW9ucywgVmVyc2lvbj05LjIuMC41NywgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBPz///+DAlN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLktleVZhbHVlUGFpcmAyW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtIeXBlclNpY1BvcnRhbC5Db21tb25zLkFQS0Zvcm1SYXdGaWVsZHNldCwgSHlwZXJTaWNQb3J0YWwuQ29tbW9ucywgVmVyc2lvbj05LjIuMC41NywgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsXV0CAAAAA2tleQV2YWx1ZQEEKUh5cGVyU2ljUG9ydGFsLkNvbW1vbnMuQVBLRm9ybVJhd0ZpZWxkc2V0BQAAAAYGAAAAFGZpZWxkc2V0X3ZhbHV0YXppb25lCQcAAAAFBwAAAClIeXBlclNpY1BvcnRhbC5Db21tb25zLkFQS0Zvcm1SYXdGaWVsZHNldAQAAAACSUQFVGl0bGUIQ3NzQ2xhc3MHVmlzaWJsZQEBAQABBQAAAAkGAAAACgYJAAAAAAELHh5mb3JtX3ZhbHV0YXppb25lX0ZJRUxEU0VUX1NPUlQy6AEAAQAAAP////8BAAAAAAAAAAQBAAAAf1N5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkxpc3RgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0DAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgYAAAgICQIAAAABAAAAAQAAABECAAAABAAAAAYDAAAAFGZpZWxkc2V0X3ZhbHV0YXppb25lDQMLHhhmb3JtX3ZhbHV0YXppb25lX0hJRERFTlMy3QoAAQAAAP////8BAAAAAAAAAAQBAAAA4gFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5EaWN0aW9uYXJ5YDJbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV0sW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dBAAAAAdWZXJzaW9uCENvbXBhcmVyCEhhc2hTaXplDUtleVZhbHVlUGFpcnMAAwADCJIBU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuR2VuZXJpY0VxdWFsaXR5Q29tcGFyZXJgMVtbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0I5gFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5LZXlWYWx1ZVBhaXJgMltbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XSxbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV1bXQEAAAAJAgAAAAMAAAAJAwAAAAQCAAAAkgFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5HZW5lcmljRXF1YWxpdHlDb21wYXJlcmAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQAAAAAHAwAAAAABAAAAAQAAAAPkAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLktleVZhbHVlUGFpcmAyW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQT8////5AFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5LZXlWYWx1ZVBhaXJgMltbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XSxbU3lzdGVtLlN0cmluZywgbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0CAAAAA2tleQV2YWx1ZQEBBgUAAAAIdGlwb2xvZ3kGBgAAAAExC2QWAmYPZBYGAgEPDxYMHhxib3hWYWx1dGF6aW9uZVJhdGluZ19ERUZBVUxUZR4aYm94VmFsdXRhemlvbmVSYXRpbmdfTEFCRUwFNFF1YW50byBzb25vIGNoaWFyZSBsZSBpbmZvcm1hemlvbmkgc3UgcXVlc3RhIHBhZ2luYT8eGWJveFZhbHV0YXppb25lUmF0aW5nX0hFTFBlHiBib3hWYWx1dGF6aW9uZVJhdGluZ19JU19SRVFVSVJFRGceGmJveFZhbHV0YXppb25lUmF0aW5nX1ZBTFVFZR4cYm94VmFsdXRhemlvbmVSYXRpbmdfT1BUSU9OUwUCICBkZAIDDw8WEB4ZYm94VmFsdXRhemlvbmVSYWRpb19WQUxVRWUeGGJveFZhbHV0YXppb25lUmFkaW9fSEVMUGUeG2JveFZhbHV0YXppb25lUmFkaW9fREVGQVVMVGUeG2JveFZhbHV0YXppb25lUmFkaW9fT1BUSU9OUwUCICAeGWJveFZhbHV0YXppb25lUmFkaW9fTEFCRUwFKURvdmUgaGFpIGluY29udHJhdG8gbWFnZ2lvcmkgZGlmZmljb2x0w6A/Hhlib3hWYWx1dGF6aW9uZVJhZGlvX0lURU1TMvUEAAEAAAD/////AQAAAAAAAAAEAQAAAPsBU3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuRGljdGlvbmFyeWAyW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldLFtIeXBlclNpY1BvcnRhbC5Db21tb25zLkFQS0lucHV0SXRlbSwgSHlwZXJTaWNQb3J0YWwuQ29tbW9ucywgVmVyc2lvbj05LjIuMC41NywgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsXV0DAAAAB1ZlcnNpb24IQ29tcGFyZXIISGFzaFNpemUAAwAIkgFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5HZW5lcmljRXF1YWxpdHlDb21wYXJlcmAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQgAAAAACQIAAAAAAAAABAIAAACSAVN5c3RlbS5Db2xsZWN0aW9ucy5HZW5lcmljLkdlbmVyaWNFcXVhbGl0eUNvbXBhcmVyYDFbW1N5c3RlbS5TdHJpbmcsIG1zY29ybGliLCBWZXJzaW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49Yjc3YTVjNTYxOTM0ZTA4OV1dAAAAAAseHmJveFZhbHV0YXppb25lUmFkaW9fSVRFTVNfU09SVDLMAQABAAAA/////wEAAAAAAAAABAEAAAB/U3lzdGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuTGlzdGAxW1tTeXN0ZW0uU3RyaW5nLCBtc2NvcmxpYiwgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODldXQMAAAAGX2l0ZW1zBV9zaXplCF92ZXJzaW9uBgAACAgJAgAAAAAAAAAAAAAAEQIAAAAAAAAACx4fYm94VmFsdXRhemlvbmVSYWRpb19JU19SRVFVSVJFRGdkZAIFDw8WDh4aYm94VmFsdXRhemlvbmVOb3RlX0RFRkFVTFRlHhhib3hWYWx1dGF6aW9uZU5vdGVfTEFCRUwFH1Z1b2kgYWdnaXVuZ2VyZSBhbHRyaSBkZXR0YWdsaT8eF2JveFZhbHV0YXppb25lTm90ZV9IRUxQZR4eYm94VmFsdXRhemlvbmVOb3RlX0lTX1JFUVVJUkVEaB4YYm94VmFsdXRhemlvbmVOb3RlX1ZBTFVFZR4aYm94VmFsdXRhemlvbmVOb3RlX09QVElPTlMFAiAgHh5ib3hWYWx1dGF6aW9uZU5vdGVfUExBQ0VIT0xERVJlZGQCEQ8WBB8IBSVodHRwOi8vd3d3LmNvbXVuZS5tb250ZXJvdG9uZG8ucm0uaXQvHwoFE25vb3BlbmVyIG5vcmVmZXJyZXIWBAIBDw8WAh8MBVEvY21zbW9udGVyb3RvbmRvL2dldGltZy5hc3B4P1NPVVJDRT1BUFBMSUNBVElPTiZLRVk9V1NETl9TVEVNTUFfRk9PVEVSJk9VVFBVVD1QTkcWCB4LYXJpYS1oaWRkZW4FBHRydWUfDQUPbG9nbyBkZWwgY29tdW5lHw4FFkNvbXVuZSBkaSBNb250ZXJvdG9uZG8fDwUWY3RsMDBfZm9vdGVyX2hvbWVfbGlua2QCAw8WAh4JaW5uZXJodG1sBRZDb211bmUgZGkgTW9udGVyb3RvbmRvZAISDxYCHwtoZAITD2QWAgIBDxYCHwcCAxYGZg9kFgRmDxUCATQJQ2l0dGFkaW5pZAIBDxYCHwcCBxYOZg9kFgJmDxUEDUFsYm8gcHJldG9yaW8sL2Ntc21vbnRlcm90b25kby9saXN0YXNlcnZpemkuYXNweD9VPTEmUz0yMDAADUFsYm8gcHJldG9yaW9kAgEPZBYCZg8VBBNBdHRpIGFtbWluaXN0cmF0aXZpLC9jbXNtb250ZXJvdG9uZG8vbGlzdGFzZXJ2aXppLmFzcHg/VT0xJlM9MzAwABNBdHRpIGFtbWluaXN0cmF0aXZpZAICD2QWAmYPFQQSU2Vydml6aSBhbmFncmFmaWNpLC9jbXNtb250ZXJvdG9uZG8vbGlzdGFzZXJ2aXppLmFzcHg/VT0xJlM9NDAwABJTZXJ2aXppIGFuYWdyYWZpY2lkAgMPZBYCZg8VBAtUcmFzcGFyZW56YSwvY21zbW9udGVyb3RvbmRvL2xpc3Rhc2Vydml6aS5hc3B4P1U9MSZTPTUwMAALVHJhc3BhcmVuemFkAgQPZBYCZg8VBA9FbGV6aW9uaSBvbmxpbmUsL2Ntc21vbnRlcm90b25kby9saXN0YXNlcnZpemkuYXNweD9VPTEmUz02MDAAD0VsZXppb25pIG9ubGluZWQCBQ9kFgJmDxUEA1NVRS0vY21zbW9udGVyb3RvbmRvL2xpc3Rhc2Vydml6aS5hc3B4P1U9MSZTPTEyMDAAA1NVRWQCBg9kFgJmDxUEC1N0YXRpc3RpY2hlLS9jbXNtb250ZXJvdG9uZG8vbGlzdGFzZXJ2aXppLmFzcHg/VT0xJlM9MTMwMAALU3RhdGlzdGljaGVkAgEPZBYEZg8VAgE0B0ltcHJlc2VkAgEPFgIfBwICFgRmD2QWAmYPFQQNQWxibyBwcmV0b3Jpby0vY21zbW9udGVyb3RvbmRvL2xpc3Rhc2Vydml6aS5hc3B4P1U9MiZTPTIyMDAADUFsYm8gcHJldG9yaW9kAgEPZBYCZg8VBBNBdHRpIGFtbWluaXN0cmF0aXZpLS9jbXNtb250ZXJvdG9uZG8vbGlzdGFzZXJ2aXppLmFzcHg/VT0yJlM9MjMwMAATQXR0aSBhbW1pbmlzdHJhdGl2aWQCAg9kFgRmDxUCATQKQWx0cmkgRW50aWQCAQ8WAh8HAgEWAmYPZBYCZg8VBBJTZXJ2aXppIGFuYWdyYWZpY2ktL2Ntc21vbnRlcm90b25kby9saXN0YXNlcnZpemkuYXNweD9VPTMmUz0zMTAwABJTZXJ2aXppIGFuYWdyYWZpY2lkAhQPDxYCHwYFFkNvbXVuZSBkaSBNb250ZXJvdG9uZG9kZAIVDw8WAh8GBRxQaWF6emEgQW5nZWxvIEZyYW1tYXJ0aW5vLCA0ZGQCFg8PFgIfBgUXMDAwMTUgTU9OVEVST1RPTkRPIChSTSlkZAIXDw8WAh8GBQ9DRjogODAxNDAxMTA1ODhkZAIYDw8WAh8GBRJQLklWQTogMDIxMjgzNjEwMDlkZAIZDw8WAh8GBRNUZWxlZm9ubzogMDYvOTA5NjQxZGQCGg8PFgIfBgUQRkFYOiAwNi85MDk2NDQyNmRkAhsPDxYEHwYFIlBFQzogY29tdW5lLm1vbnRlcm90b25kby5ybUBwZWMuaXQfCQUkbWFpbHRvOmNvbXVuZS5tb250ZXJvdG9uZG8ucm1AcGVjLml0ZGQCHA8PFgYeBlRhcmdldAUGX2JsYW5rHwkFJWh0dHA6Ly93d3cuY29tdW5lLm1vbnRlcm90b25kby5ybS5pdC8fBgUlaHR0cDovL3d3dy5jb211bmUubW9udGVyb3RvbmRvLnJtLml0LxYCHwoFE25vb3BlbmVyIG5vcmVmZXJyZXJkAh4PDxYGHwYFGFNlZ25hbGF6aW9uZSBkaXNzZXJ2aXppbx8JZR8LaGRkAh8PDxYGHwYFF1JpY2hpZXN0YSBkaSBhc3Npc3RlbnphHwllHwtoZGQCIA8WAh8LaGQCIQ8PFgYfBgUTSW5mb3JtYXRpdmEgcHJpdmFjeR8zBQZfYmxhbmsfCQVDaHR0cDovL3d3dy5jb211bmUubW9udGVyb3RvbmRvLnJtLml0L2FkZW1waW1lbnRpLW5vcm1hdGl2aS9wcml2YWN5LxYGHwoFE25vb3BlbmVyIG5vcmVmZXJyZXIeDGRhdGEtZWxlbWVudAUTcHJpdmFjeS1wb2xpY3ktbGluax8OBR9WYWkgYWxsYSBwYWdpbmE6IHByaXZhY3kgcG9saWN5ZAIiDw8WBh8GBR9EaWNoaWFyYXppb25lIGRpIGFjY2Vzc2liaWxpdMOgHzMFBl9ibGFuax8JBUJodHRwczovL2Zvcm0uYWdpZC5nb3YuaXQvdmlldy80MDhiMDc4MC1iOTc5LTExZjAtOTE5Ny0yOTFiM2QxMzUwMjMWBh8KBRNub29wZW5lciBub3JlZmVycmVyHzQFEmFjY2Vzc2liaWxpdHktbGluax8OBTBWYWkgYWxsYSBwYWdpbmE6IGRpY2hpYXJhemlvbmUgZGkgYWNjZXNzaWJpbGl0w6BkAiMPDxYGHwYFC1N0YXRpc3RpY2hlHwllHwtoFgIfDgUcVmFpIGFsbGEgcGFnaW5hOiBzdGF0aXN0aWNoZWQCJA8PFgYfMwUGX2JsYW5rHwkFF2h0dHA6Ly93d3cuYXBzeXN0ZW1zLml0HwZlFgIfCgUTbm9vcGVuZXIgbm9yZWZlcnJlcmQCAw8WAh8PBRVjdGwwMF90eHRNb2RhbFNYdGl0bGVkAgQPFgIfBmVkAgUPFgQfBmUfC2hkAgYPFgIfBmRkAggPFgIfC2hkAgkPZBYCZg8WAh8GBSY8IS0tIHZlcnNpb25lOiBXRUJIT1NUUFRBV1MzLjAxLjI0IC0tPmQCCg8WAh8GZWRkrU3OdioE/JUFOiqQjehqPZgVqN/vCyOTRfqr460BpTo=" />
+
+<script type="text/javascript" src="/cmsmonterotondo/script/common.js"></script><!-- ASP.digitalsignviewer_aspx Prodotto: WebSicDotNet Versione:9.05.01.24 by A.P. Systems S.r.l. -->
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="EC10DE20" />
+        <header role="banner" class="it-header-wrapper it-header-sticky" data-bs-toggle="sticky" data-bs-position-type="fixed" data-bs-sticky-class-name="is-sticky" data-bs-target="#header-nav-wrapper">
+            <!-- HEADER TOP -->
+            <div class="it-header-slim-wrapper">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="it-header-slim-wrapper-content">
+                                
+                                <a href="#pagTitle" class="visually-hidden focuslink" onfocus="this.classList.remove('visually-hidden')" onfocusout="this.classList.add('visually-hidden')">Salta e vai al contenuto</a>
+                                <a href="#footer" class="visually-hidden focuslink" onfocus="this.classList.remove('visually-hidden')" onfocusout="this.classList.add('visually-hidden')">Salta e vai al footer</a>
+                                <a id="ctl00_lnkSitoIstituzionale" class="d-lg-block navbar-brand" rel="noopener noreferrer" href="http://www.comune.monterotondo.rm.it/" target="_blank"><span>Sito istituzionale</span></a>
+                                <div class="it-header-slim-right-zone">
+
+                                    
+                                    
+
+<div id="ctl00_login_button_container_PanelUnLogged">
+	
+    <a href="./elencoservizi.aspx?login=true" id="ctl00_login_button_container_lnkPageLogin" class="btn btn-primary-dark btn-icon btn-full" data-element="personal-area-login">
+        <span class="rounded-icon">
+            <svg class="icon icon-primary avatar">
+                <title>Avatar utente</title>
+                <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-user" xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-user"></use>
+            </svg>
+        </span>
+        <span id="ctl00_login_button_container_lblLogin" class="d-none d-lg-block">ACCEDI</span>
+    </a>
+
+</div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="it-nav-wrapper">
+                <div class="it-header-center-wrapper theme-light">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="it-header-center-content-wrapper">
+                                    <div class="it-brand-wrapper">
+                                        <a href="/cmsmonterotondo/" alt="Vai a: homepage" title="Vai a: homepage" id="gotohomeheader" aria-label="Vai a: homepage">
+                                            <img id="ctl00_logo_comune_header" class="logo logo_dark" alt="logo del comune" title="Comune di Monterotondo" aria-labelledby="gotohomeheader" src="/cmsmonterotondo/getimg.aspx?SOURCE=APPLICATION&amp;KEY=WSDN_STEMMA_HEADER&amp;OUTPUT=PNG" border="0" />
+                                            <img id="ctl00_logo_comune_header_white" class="logo logo_light" alt="logo del comune" title="Comune di Monterotondo" aria-labelledby="gotohomeheader" src="/cmsmonterotondo/getimg.aspx?SOURCE=APPLICATION&amp;KEY=WSDN_STEMMA_FOOTER&amp;OUTPUT=PNG" border="0" style="display:none;" />
+
+                                            <div class="it-brand-text">
+                                                <div class="it-brand-title d-none d-xs-block d-md-block d-lg-block d-xxl-block">Comune di Monterotondo</div>
+                                                <div class="it-brand-title d-block d-xs-none d-md-none d-lg-none d-xxl-none">Monterotondo</div>
+                                                
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="it-right-zone">
+                                        <div class="it-socials d-none d-md-flex">
+                                            
+                                            <ul>
+                                                
+                                            </ul>
+                                        </div>
+                                        <div id="ctl00_attiva_ricerca_globale" class="it-search-wrapper">
+                                            <span class="d-none d-md-block">Cerca</span>
+                                            <button class="search-link rounded-icon" title="Cerca nel sito" type="button" data-bs-toggle="modal" data-bs-target="#search-modal" aria-label="Apri la modale di ricerca" data-focus-mouse="false">
+                                                <svg class="icon icon-primary">
+                                                    <title>Apri la modale di ricerca</title>
+                                                    <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-search" xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-search"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="it-header-navbar-wrapper" id="header-nav-wrapper">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 h-fix">
+                                <!--start nav-->
+                                <nav class="navbar navbar-expand-lg" aria-label="Navigazione principale" role="navigation">
+                                    <button class="custom-navbar-toggler" type="button" aria-controls="nav0" 
+                                        aria-expanded="false" aria-label="Mostra/Nascondi la navigazione" data-bs-toggle="navbarcollapsible" data-bs-target="#nav0">
+                                        <svg class="icon bg-override icon-primary">
+                                            <title>Apri menù</title>
+                                            <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-burger" xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-burger"></use>
+                                        </svg>
+                                    </button>
+                                    <div class="navbar-collapsable" id="nav0" style="display: none;">
+                                        <div class="overlay" style="display: none;"></div>
+                                        <div class="close-div">
+                                            <button class="btn close-menu" type="button" title="Nascondi la navigazione">
+                                                <span class="visually-hidden">Nascondi la navigazione</span>
+                                                <svg class="icon icon-dark">
+                                                    <title>Chiudi menù</title>
+                                                    <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-close-big" xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-close-big"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="menu-wrapper">
+                                
+                                            <ul class="navbar-nav" data-element="main-navigation">
+                                                
+                                                        <li class="nav-item ">
+                                                            <a  class="nav-link " href="/cmsmonterotondo/listautenti.aspx?U=1" >
+                                                                <span>Cittadini</span>
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li class="nav-item ">
+                                                            <a  class="nav-link " href="/cmsmonterotondo/listautenti.aspx?U=2" >
+                                                                <span>Imprese</span>
+                                                            </a>
+                                                        </li>
+                                                    
+                                                        <li class="nav-item ">
+                                                            <a  class="nav-link " href="/cmsmonterotondo/listautenti.aspx?U=3" >
+                                                                <span>Altri Enti</span>
+                                                            </a>
+                                                        </li>
+                                                    
+                                                <li class="nav-item d-lg-none"><a id="ctl00_lnkMobileIstituzionale" class="nav-link" rel="noopener noreferrer" href="http://www.comune.monterotondo.rm.it/" target="_blank">Sito istituzionale</a></li>
+                                            </ul>
+                                            <ul class="navbar-nav navbar-secondary">
+                                                <li class="nav-item">
+                                                    <a href="/cmsmonterotondo/elencoservizi.aspx" id="ctl00_lnkTuttiServizi" class="nav-link" data-element="all-services">
+                                                        <span class="">Tutti i servizi</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    
+        <main role="main">
+            <div class="pt-2 bg-light">
+	<div class="px-4 container">
+		<div class="row">
+			<div class="px-lg-4 col-12">
+				<nav class="breadcrumb-container">
+					<ol class="breadcrumb" itemscope="" itemtype="https://schema.org/BreadcrumbList">
+						<li class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"><a itemprop="item" rel="noopener noreferrer" target="_blank" href="http://www.comune.monterotondo.rm.it/"><span itemprop="name">Home</span></a><meta itemprop="position" content="1" /><span class="separator">/</span></li><li class="active breadcrumb-item" aria-current="page" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"><span itemprop="name">Servizi online</span><meta itemprop="position" content="2" /></li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+            
+    
+
+<section class="pb-1" id="tabBody" aria-describedby="tabBodyTitolo">
+    <div class="px-0 pt-2 container">
+        <div class="row">
+	        <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Informazioni sul documento firmato digitalmente</h3>
+                        <p class="card-text">
+                            Nome del file: <span id="ctl00_area_main_digitalsignviewer1_lblFileName" class="inline fw-bold">1084_002_GN_9509.pdf.p7m</span><br />
+                            Esito della verifica: <span id="ctl00_area_main_digitalsignviewer1_lblEsito" class="inline fw-bold"><font color="Green">Firma CADES valida. Data Verifica: 26/11/2025 18:25:12 (UTC)</font></span><br />
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Elenco firmatari</h3>
+
+                        
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th class="d-sm-table-cell">Data Firma (UTC)</th>
+                                        <th class="d-sm-table-cell">Esito verifica</th>
+                                        <th class="d-sm-table-cell">Firmatario</th>
+                                        <th class="d-sm-table-cell d-none">Algoritmo</th>
+                                        <th class="d-sm-table-cell d-none">Ente certificatore</th>
+                                        <th class="d-sm-table-cell d-none">Stato</th>
+                                        <th class="d-sm-table-cell d-none">Numero di serie</th>
+                                    </tr>
+                                        </thead><tbody>
+                            
+                                <tr>
+                                    <td class="d-sm-table-cell">26/11/2025 13:10:39</td>
+                                    <td class="d-sm-table-cell" style='color:green'>Firma CADES valida</td>
+                                    <td class="d-sm-table-cell">Michele Smargiassi</td>
+                                    <td class="d-sm-table-cell d-none">SHA-256</td>
+                                    <td class="d-sm-table-cell d-none">ArubaPEC EU Qualified Certificates CA G1</td>
+                                    <td class="d-sm-table-cell d-none">IT</td>
+                                    <td class="d-sm-table-cell d-none">14775691672235470768049252604408713797</td>
+                                </tr>
+                            
+                                </tbody>
+                                </table>
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6 text-end">
+                <a id="ctl00_area_main_digitalsignviewer1_hypP7M" class="btn btn-primary apslinkbutton" href="getfile.aspx?P7MV=0&amp;SOURCE=SESSION&amp;KEY=APS.P7MViewer.Signed&amp;NOMEALLEGATO=1084_002_GN_9509.pdf.p7m">Apri documento firmato</a>
+            </div>
+            <div class="col-6 text-start">
+                <a id="ctl00_area_main_digitalsignviewer1_hypFile" class="btn btn-primary apslinkbutton" href="getfile.aspx?SOURCE=SESSION&amp;KEY=APSP7MVIEWERCONTENT&amp;NOMEALLEGATO=1084_002_GN_9509.pdf">Anteprima documento</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+            
+        </main>
+    
+        <footer class="it-footer mt-5" id="footer" role="contentinfo">
+            <div class="it-footer-main">
+                <div class="container">
+                    <div class="row">
+                        <div class="row clearfix align-items-center">
+                            <div class="col-lg-10 col-md-8 mt-5 footer-items-wrapper align-self-start">
+                                <div class="it-brand-wrapper">
+                                    <a href="http://www.comune.monterotondo.rm.it/" id="ctl00_footer_home_link" alt="Vai a: homepage" title="Vai a: homepage" aria-label="Vai a: homepage" rel="noopener noreferrer">
+                                        <img id="ctl00_logo_comune_footer" class="icon" aria-hidden="true" alt="logo del comune" title="Comune di Monterotondo" aria-labelledby="ctl00_footer_home_link" src="/cmsmonterotondo/getimg.aspx?SOURCE=APPLICATION&amp;KEY=WSDN_STEMMA_FOOTER&amp;OUTPUT=PNG" border="0" />
+                                        <div class="it-brand-text">
+                                            <h2 id="ctl00_nome_comune_footer" class="no_toc">Comune di Monterotondo</h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                        <div id="ctl00_menu_esteso_footer" class="row">
+                        
+                             
+                                <div class="col-md-4 link-list-wrapper">
+                                    <h3 class="mb-3 pb-2 px-0 border-bottom text-uppercase h4 text-white fs-6">Cittadini</h3>
+                                    <ul class="footer-list clearfix link-list">
+
+                                    
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Albo pretorio" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=200" >
+                                                Albo pretorio
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Atti amministrativi" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=300" >
+                                                Atti amministrativi
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Servizi anagrafici" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=400" >
+                                                Servizi anagrafici
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Trasparenza" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=500" >
+                                                Trasparenza
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Elezioni online" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=600" >
+                                                Elezioni online
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: SUE" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=1200" >
+                                                SUE
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Statistiche" href="/cmsmonterotondo/listaservizi.aspx?U=1&S=1300" >
+                                                Statistiche
+                                            </a>
+                                        </li>
+                                        
+
+                                    </ul>
+                                </div>
+                            
+                             
+                                <div class="col-md-4 link-list-wrapper">
+                                    <h3 class="mb-3 pb-2 px-0 border-bottom text-uppercase h4 text-white fs-6">Imprese</h3>
+                                    <ul class="footer-list clearfix link-list">
+
+                                    
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Albo pretorio" href="/cmsmonterotondo/listaservizi.aspx?U=2&S=2200" >
+                                                Albo pretorio
+                                            </a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Atti amministrativi" href="/cmsmonterotondo/listaservizi.aspx?U=2&S=2300" >
+                                                Atti amministrativi
+                                            </a>
+                                        </li>
+                                        
+
+                                    </ul>
+                                </div>
+                            
+                             
+                                <div class="col-md-4 link-list-wrapper">
+                                    <h3 class="mb-3 pb-2 px-0 border-bottom text-uppercase h4 text-white fs-6">Altri Enti</h3>
+                                    <ul class="footer-list clearfix link-list">
+
+                                    
+                                        <li>
+                                            <a class="list-item" title="Vai al servizio: Servizi anagrafici" href="/cmsmonterotondo/listaservizi.aspx?U=3&S=3100" >
+                                                Servizi anagrafici
+                                            </a>
+                                        </li>
+                                        
+
+                                    </ul>
+                                </div>
+                            
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9 col-md-12 mt-5 footer-items-wrapper">
+                            <h3 class="mb-3 pb-2 border-bottom text-uppercase h4 fs-6">Informazioni e contatti</h3>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-8">
+                                    <div class="link-list-wrapper">
+                                        <ul class="footer-list clearfix link-list txt-small">
+                                            <li><strong><span id="ctl00_lblFooterComuneNome">Comune di Monterotondo</span></strong></li>
+                                            <li><span id="ctl00_lblFooterComuneIndirizzoRiga1">Piazza Angelo Frammartino, 4</span></li>
+                                            <li><span id="ctl00_lblFooterComuneIndirizzoRiga2">00015 MONTEROTONDO (RM)</span></li>
+                                            <li><span id="ctl00_lblFooterComuneCF">CF: 80140110588</span></li>
+                                            <li><span id="ctl00_lblFooterComuneIVA">P.IVA: 02128361009</span></li>
+                                            <li><br /></li>
+                                            <li><span id="ctl00_lblFooterComuneTelefono">Telefono: 06/909641</span></li>
+                                            <li><span id="ctl00_lblFooterComuneFax">FAX: 06/90964426</span></li>
+                                            <li><a id="ctl00_lnkFooterComunePEC" class="text-white line-base" href="mailto:comune.monterotondo.rm@pec.it">PEC: comune.monterotondo.rm@pec.it</a></li>
+                                            <li><a id="ctl00_lnkFooterComuneSito" class="text-white line-base" rel="noopener noreferrer" href="http://www.comune.monterotondo.rm.it/" target="_blank">http://www.comune.monterotondo.rm.it/</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--<div class="col-md-12 col-lg-6">
+                                    <div class="link-list-wrapper">
+                                        <ul class="footer-list clearfix link-list txt-small">
+                                        
+                                        </ul>
+                                    </div>
+                                </div>-->
+                                <div class="col-md-12 col-lg-4">
+                                    <div class="link-list-wrapper">
+                                        <ul class="footer-list clearfix link-list txt-small">
+                                            <li></li>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        </div>
+                        <div class="row">
+                        <div class="col-lg-8 col-md-12 mt-5 footer-items-wrapper">
+                            <div class="footer-bottom py-4 border-top me-2 mb-3">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12 mb-3">
+                                        <a id="ctl00_lnkFooterPrivacy" class="text-white" rel="noopener noreferrer" data-element="privacy-policy-link" title="Vai alla pagina: privacy policy" href="http://www.comune.monterotondo.rm.it/adempimenti-normativi/privacy/" target="_blank">Informativa privacy</a>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 mb-3">
+                                        <a id="ctl00_lnkFooterAccessibilita" class="text-white" rel="noopener noreferrer" data-element="accessibility-link" title="Vai alla pagina: dichiarazione di accessibilità" href="https://form.agid.gov.it/view/408b0780-b979-11f0-9197-291b3d135023" target="_blank">Dichiarazione di accessibilità</a>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12 mb-3">
+                                        
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 mt-5 footer-items-wrapper">
+                            <div class="footer-bottom py-4 text-end border-top mb-3">
+                                <a id="ctl00_lnkHypersic" class="footer-apk text-white" rel="noopener noreferrer" href="http://www.apsystems.it" target="_blank">
+                                    <span>Powered by <br />APKAPPA s.r.l.</span>
+                                    <span><img src="/cmsmonterotondo/img/structure/hypersic10_logo_grey.png" alt="logo hypersic" class="img-fluid logo-hypersic-footer" /></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </footer>
+    </form>
+
+    <!-- TEMPLATE MODALE SX -->
+    <div id="ctl00_modalSX" class="modal it-dialog-scrollable fade" tabindex="-1" role="dialog" aria-labelledby="ctl00_txtModalSXtitle">
+        <div class="modal-dialog modal-dialog-left" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="ctl00_txtModalSXtitle" class="modal-title h5 no_toc">Modal</h2>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Chiudi finestra modale" title="Chiudi finestra modale">
+                        <svg class="icon icon-primary">
+                            <title>Chiudo il modale</title>
+                            <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-close"
+                                xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <div id="ctl00_txtModalSxBody" class="modal-body">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" type="button" aria-label="Ok" title="Ok">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BEGIN Modale di ricerca -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSearchTitle" aria-hidden="true" id="search-modal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h3 no_toc" id="modalSearchTitle">Cerca nei servizi</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" title="Chiudi modale di ricerca" aria-label="Chiudi modale di ricerca"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container py-5">
+                        <form role="search" method="get" action="/cmsmonterotondo/ricerca.aspx">
+                            <div class="row">
+                                <div class="col-12 input-container">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <svg class="icon icon-sm icon-primary">
+                                                        <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-search" xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-search"></use>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <label for="input-search" class="d-none d-md-block">Inserisci qui il testo di ricerca...</label>
+                                            <input type="search" class="form-control" id="input-search" name="txt">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit" id="button-3" aria-label="Cerca" title="Cerca">Cerca</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+    <!-- END Modale di ricerca -->
+
+    <!-- BEGIN Modale del manuale -->
+    <div class="modal it-dialog-scrollable fade modal-lg" tabindex="-1" role="dialog" id="modalmanuale" aria-labelledby="modalrightTitle">
+        <div class="modal-dialog modal-dialog-right modal-lg" role="document" style="max-width:40%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5 " id="modalrightTitle">GUIDA AL PORTALE DEI SERVIZI</h2>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Chiudi">
+                        <svg class="icon icon-primary">
+                            <use href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-close" xlink:href="/cmsmonterotondo/assets/images/svg/sprites.svg#it-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Modale del manuale -->
+
+    <script>
+        const BASE_PATH = '/cmsmonterotondo/';
+        window.__PUBLIC_PATH__ = BASE_PATH + 'assets/fonts';    //setting fonts path
+        const LANG_CODE = 'it';
+        const TRACE_LOG = false;
+    </script>
+    
+    <script type="text/javascript" src="/cmsmonterotondo/assets/externals/bootstrap-italia.bundle.min.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/externals/easepick.min.js"></script>
+
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/modal.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apktools.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apkinputs.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apkatom.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apkform.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apkoutputs.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apktab.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apkcontainers.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/apkmain.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/gestione_form.js"></script>
+    <script type="text/javascript" src="/cmsmonterotondo/assets/scripts/custom.js"></script>
+
+    
+    
+
+    
+
+    
+
+    <!-- versione: WEBHOSTPTAWS3.01.24 -->
+
+
+    
+
+    <script>
+        window.onload = function () {
+            document.querySelector('.loader_container').remove();
+        }
+        function shared_url_copy(el) {
+            let input_html = el.closest('.input-group').querySelector('input');
+            input_html.select();
+            input_html.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input_html.value);
+        }
+    </script>
+
+</body>
+</html>
