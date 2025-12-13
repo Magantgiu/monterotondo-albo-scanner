@@ -60,17 +60,17 @@ def save_metadata_to_supabase(numero_atto: str, data_pubb: dt.date,
                               oggetto: str, pdf_path: str):
     """Salva metadati in Supabase"""
     try:
-        sup = create_client(SUP_URL, SUP_KEY)
-        record = {
-            "id": numero_atto,
-            "data_pubb": data_pubb.isoformat(),
-            "oggetto": oggetto,
-            "pdf_url": pdf_path,
-            "status": "nuovo"
-        }
+       # sup = create_client(SUP_URL, SUP_KEY)
+         # record = {
+           # "id": numero_atto,
+           # "data_pubb": data_pubb.isoformat(),
+           # "oggetto": oggetto,
+           # "pdf_url": pdf_path,
+           # "status": "nuovo"
+       # }
         
-        sup.table("atti").insert(record, upsert=True).execute()
-        print(f"  ✅ Metadati salvati in Supabase")
+       # sup.table("atti").insert(record, upsert=True).execute()
+       # print(f"  ✅ Metadati salvati in Supabase")
         
     except Exception as e:
         print(f"  ⚠ Errore salvando metadati: {e}")
@@ -104,7 +104,7 @@ if __name__ == "__main__":
                 pdf_path = save_pdf_locally(pdf_bytes, atto_id, data_pubb)
                 
                 # Salva metadati in Supabase
-                save_metadata_to_supabase(atto_id, data_pubb, oggetto, pdf_path)
+               # save_metadata_to_supabase(atto_id, data_pubb, oggetto, pdf_path)
                 
                 print(f"     ✅ Completato!")
             
