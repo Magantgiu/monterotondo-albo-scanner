@@ -1,7 +1,7 @@
 name: Scraping Albo – Chrome headless
 on:
   schedule:
-    - cron: "* 06 * 1 *"   # 6:00 e 18:00 UTC il lunedì
+    - cron: "15 18 * * *"   # 18:15 UTC ogni giorno
   workflow_dispatch:
 jobs:
   scrape:
