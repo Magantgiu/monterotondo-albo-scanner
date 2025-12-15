@@ -61,13 +61,13 @@ def save_metadata_to_supabase(numero_atto: str, data_pubb: dt.date,
     """Salva metadati in Supabase"""
     try:
        # sup = create_client(SUP_URL, SUP_KEY)
-         # record = {
-           # "id": numero_atto,
+          record = {
+            "id": numero_atto,
            # "data_pubb": data_pubb.isoformat(),
            # "oggetto": oggetto,
-           # "pdf_url": pdf_path,
-           # "status": "nuovo"
-       # }
+            "pdf_url": pdf_path,
+            "status": "nuovo"
+        }
         
        # sup.table("atti").insert(record, upsert=True).execute()
        # print(f"  ✅ Metadati salvati in Supabase")
