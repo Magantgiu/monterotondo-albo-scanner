@@ -20,27 +20,27 @@ Sistema automatizzato per scaricare atti dal **Albo Pretorio di Monterotondo**, 
 ```
 ┌─────────────────────────────────────────┐
 │  GitHub Actions (Workflow)              │
-│  ├─ 06:00 e 18:00 UTC                   │
+│  ├─ 18:00 UTC                   │
 │  ├─ Scarica PDF da Albo Pretorio        │
 │  └─ Salva in /pdfs/YYYY/MM/             │
 └─────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────┐
-│  GitHub Repository                      │
+│  Esempio di GitHub Repository                      │
 │  └─ pdfs/2025/11/*.pdf                  │
 └─────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────┐
-│  Google Apps Script (Trigger ogni 6h)   │
+│  Google Apps Script (Trigger ogni 24h)   │
 │  ├─ Legge PDF da GitHub API             │
 │  ├─ Estrae testo (OCR)                  │
-│  ├─ Chiama Gemini AI                    │
+│  ├─ Chiama Kimi K2 AI                    │
 │  └─ Genera bozze                        │
 └─────────────────────────────────────────┘
                     ↓
 ┌─────────────────────────────────────────┐
 │  Google Sheet ("PostGenerati")          │
-│  └─ Bozze pronte per approvazione       │
+│  └─ Bozze pronte per approvazione su Wordpress │
 └─────────────────────────────────────────┘
 ```
 
