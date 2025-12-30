@@ -1,7 +1,6 @@
 """
-core_scraper.py
-Scarica atti da albo Hypersic (Monterotondo) – solo cloud-ready.
-Scarica TUTTI i PDF seguendo i reindirizzamenti getfile.aspx
+core_scraper.py - DEBUG MODE
+Scarica atti da albo Hypersic (Monterotondo) – con logging dettagliato
 """
 import os
 import datetime as dt
@@ -23,17 +22,11 @@ LISTA_ATTI_BUTTON_ID = "tab_pnlnav_tab_risultati"
 # ----------------------------
 
 def get_pdf_from_getfile_url(driver, getfile_url: str) -> bytes:
-    """
-    Segue il reindirizzamento da getfile.aspx al PDF vero.
-    Estrae PARAM e KEY dall'URL e scarica il PDF.
-    """
+    """Segue il reindirizzamento da getfile.aspx al PDF vero."""
     try:
         print(f"    🔗 Seguendo reindirizzamento: {getfile_url[:80]}...")
         
-        # Usa requests per seguire i reindirizzamenti e ottenere il PDF
         session = requests.Session()
-        
-        # Copia i cookie da Selenium a requests
         for cookie in driver.get_cookies():
             session.cookies.set(cookie['name'], cookie['value'])
         
@@ -51,11 +44,8 @@ def get_pdf_from_getfile_url(driver, getfile_url: str) -> bytes:
         return None
 
 def scarica_da(since: dt.date):
-    """
-    Generatore: per ogni atto con data >= since restituisce
-    (id, data, oggetto, pdf_bytes)
-    Scarica TUTTI i PDF allegati (esclusi .p7m)
-    """
+    """Generatore: per ogni atto con data >= since restituisce (id, data, oggetto, pdf_bytes)"""
+    
     options = Options()
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
@@ -63,7 +53,6 @@ def scarica_da(since: dt.date):
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
-    # Download automatico PDF (se usato)
     tmp_dir = os.path.abspath("./tmp_pdf")
     os.makedirs(tmp_dir, exist_ok=True)
     options.add_experimental_option(
@@ -83,20 +72,28 @@ def scarica_da(since: dt.date):
         albo_url = f"{base_url}/portale/albopretorio/albopretorioconsultazione.aspx?P=400"
         driver.get(os.getenv("ALBO_URL", albo_url))
         print(f"📄 Caricamento: {os.getenv('ALBO_URL', albo_url)}")
+        time.sleep(5)  # ATTENDI PIÙ TEMPO PER IL CARICAMENTO
 
         # Chiudi cookie banner
+        closed_cookie = False
         for txt in ("Accetto", "ACCETTO", "Accetta", "Accept"):
             try:
                 btn = wait.until(EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(), '{txt}')]")))
                 driver.execute_script("arguments[0].click();", btn)
                 print("✓ Cookie banner chiuso")
                 time.sleep(1)
+                closed_cookie = True
                 break
             except TimeoutException:
                 continue
+        
+        if not closed_cookie:
+            print("⚠ Nessun cookie banner trovato (potrebbe essere ok)")
 
         page = 1
-        while page <= 3:
+        total_atti = 0
+        
+        while page <= 10:  # AUMENTATO LIMITE PAGINE (era 3)
             print(f"\n📖 Pagina {page}")
             
             # Attendi tabella
@@ -113,13 +110,19 @@ def scarica_da(since: dt.date):
                 table_container = driver.find_element(By.ID, TABLE_ID)
                 table = table_container.find_element(By.TAG_NAME, "table")
                 rows = table.find_elements(By.XPATH, ".//tbody/tr")
-                print(f"📊 Trovate {len(rows)} righe")
+                print(f"📊 Trovate {len(rows)} righe in questa pagina")
+                
+                if len(rows) == 0:
+                    print("⚠ Nessuna riga trovata, potrebbe essere fine dati")
+                    break
+                    
             except Exception as e:
                 print(f"✗ Errore estraendo righe: {e}")
                 break
 
-            # Per ogni riga, elabora
-            for row_idx in range(len(rows)):
+            # Per ogni riga
+            rows_to_process = len(rows)
+            for row_idx in range(rows_to_process):
                 try:
                     # RICARICARE le righe ogni volta
                     table_container = driver.find_element(By.ID, TABLE_ID)
@@ -133,25 +136,36 @@ def scarica_da(since: dt.date):
                     cells = row.find_elements(By.TAG_NAME, "td")
                     
                     if len(cells) < 8:
+                        print(f"  ⚠ Riga {row_idx}: meno di 8 celle ({len(cells)})")
                         continue
                     
                     numero_atto = cells[3].text.strip()
                     data_atto = cells[7].text.strip()
                     oggetto = cells[4].text.strip()
                     
+                    print(f"\n  🔍 Riga {row_idx}: num={numero_atto}, data={data_atto}, oggetto={oggetto[:40]}...")
+                    
                     # Salta righe non valide
-                    if not numero_atto.isdigit() or not data_atto:
+                    if not numero_atto or not data_atto:
+                        print(f"    ⏭ Saltato: numero_atto o data vuoti")
+                        continue
+                    
+                    if not numero_atto.isdigit():
+                        print(f"    ⏭ Saltato: numero_atto non è numero ({numero_atto})")
                         continue
                     
                     try:
                         data_pubb = dt.datetime.strptime(data_atto, "%d/%m/%Y").date()
-                    except ValueError:
+                    except ValueError as e:
+                        print(f"    ⏭ Saltato: data non valida ({data_atto}): {e}")
                         continue
                     
                     if data_pubb < since:
+                        print(f"    ⏭ Saltato: data {data_pubb} < since {since}")
                         continue
 
-                    print(f"🔍 Atto {numero_atto} ({data_pubb}): {oggetto[:50]}...")
+                    print(f"    ✓ Atto valido! Cliccando per scaricare...")
+                    total_atti += 1
 
                     # CLICK direttamente sulla cella
                     driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", cells[4])
@@ -163,7 +177,7 @@ def scarica_da(since: dt.date):
                     try:
                         wait.until(EC.presence_of_element_located((By.ID, ALLEGATI_PANEL_ID)))
                     except TimeoutException:
-                        print(f"  ⚠ Panel allegati non trovato")
+                        print(f"    ⚠ Panel allegati non trovato")
                         torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
                         continue
 
@@ -171,9 +185,9 @@ def scarica_da(since: dt.date):
                     try:
                         allegati_panel = driver.find_element(By.ID, ALLEGATI_PANEL_ID)
                         all_links = allegati_panel.find_elements(By.XPATH, ".//a")
-                        print(f"  📎 Trovati {len(all_links)} allegati")
+                        print(f"    📎 Trovati {len(all_links)} allegati")
                     except Exception as e:
-                        print(f"  ⚠ Errore trovando link: {e}")
+                        print(f"    ⚠ Errore trovando link: {e}")
                         torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
                         continue
 
@@ -184,28 +198,23 @@ def scarica_da(since: dt.date):
                             text = link.text.strip() or ""
                             text_clean = " ".join(text.split())
                             
-                            # Salta i file .p7m
                             if ".p7m" in text_clean.lower():
-                                print(f"  ⏭ Saltato: {text_clean[:50]} (.p7m)")
+                                print(f"    ⏭ Saltato: {text_clean[:50]} (.p7m)")
                                 continue
                             
-                            # Ottieni l'href del link
                             href = link.get_attribute("href") or ""
                             
                             if not href:
-                                print(f"  ⚠ Link {link_idx}: nessun href")
+                                print(f"    ⚠ Link {link_idx}: nessun href")
                                 continue
                             
-                            # Costruisci l'URL completo se relativo
                             if href.startswith("http"):
                                 full_url = href
                             else:
                                 full_url = f"https://servizionline.hspromilaprod.hypersicapp.net{href}"
                             
-                            print(f"  📥 [{link_idx+1}] {text_clean[:60]}...")
-                            print(f"      URL: {full_url[:80]}...")
+                            print(f"    📥 [{link_idx+1}] {text_clean[:60]}...")
                             
-                            # Scarica il PDF seguendo il reindirizzamento
                             pdf_bytes = get_pdf_from_getfile_url(driver, full_url)
                             
                             if pdf_bytes and len(pdf_bytes) > 0:
@@ -213,15 +222,13 @@ def scarica_da(since: dt.date):
                                 allegati_scaricati += 1
                             
                         except StaleElementReferenceException:
-                            print(f"  ⚠ Link stale (#{link_idx})")
+                            print(f"    ⚠ Link stale (#{link_idx})")
                             continue
                         except Exception as e:
-                            print(f"  ⚠ Errore link {link_idx}: {e}")
+                            print(f"    ⚠ Errore link {link_idx}: {e}")
                             continue
 
-                    print(f"  ✅ Allegati scaricati per questo atto: {allegati_scaricati}")
-
-                    # Torna alla lista
+                    print(f"    ✅ Allegati scaricati per questo atto: {allegati_scaricati}")
                     torna_alla_lista(driver, wait, LISTA_ATTI_BUTTON_ID)
 
                 except StaleElementReferenceException:
@@ -238,7 +245,12 @@ def scarica_da(since: dt.date):
                 page += 1
                 time.sleep(3)
             except:
+                print(f"⚠ Nessun pulsante per pagina {page + 1}, fine scaricamento")
                 break
+
+        print(f"\n\n{'='*60}")
+        print(f"📊 TOTALE ATTI PROCESSATI: {total_atti}")
+        print(f"{'='*60}")
 
     finally:
         driver.quit()
