@@ -33,11 +33,12 @@ env/
 *~
 
 # Project specific
-pdfs/
-metadata.json
 tmp_pdf/
 .env
 *.log
+
+# Nota: pdfs/ e metadata.json SONO tracciati per GitHub Actions
+# Se vuoi escluderli, rimuovi le righe nel workflow scraper.yml
 
 # Chrome driver
 chromedriver
