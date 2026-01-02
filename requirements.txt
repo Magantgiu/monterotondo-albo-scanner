@@ -1,8 +1,2 @@
 selenium==4.15.2
-google-cloud-storage==2.10.0
-supabase==2.7.0
-google-auth==2.25.2
-google-auth-httplib2==0.2.0
-google-auth-oauthlib==1.2.0
-google-api-python-client==2.108.0
-PyPDF2==3.0.1
+requests>=2.28.0
