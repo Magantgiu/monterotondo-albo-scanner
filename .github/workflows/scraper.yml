@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: "15 18 * * *"   # 18:15 UTC ogni giorno
   workflow_dispatch:
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -17,16 +18,10 @@ jobs:
         with:
           install-chromedriver: true
       
-      - run: pip install -r requirements.txt
-      
-      - name: Setup GCS Key
-        run: echo '${{ secrets.GCS_KEY_JSON }}' > gcs-key.json
+      - name: Install dependencies
+        run: pip install -r requirements.txt
       
       - name: Run scraper
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          ALBO_URL: ${{ secrets.ALBO_URL }}
         run: python scraper_stateless.py
       
       - name: Debug - Check files
@@ -34,16 +29,18 @@ jobs:
           echo "=== Directory structure ==="
           find pdfs -type f 2>/dev/null | head -20 || echo "No pdfs folder"
           echo ""
+          echo "=== Metadata ==="
+          cat metadata.json 2>/dev/null || echo "No metadata.json"
+          echo ""
           echo "=== Git status ==="
           git status
       
-      - name: Push PDF files to GitHub
+      - name: Commit and push PDF files
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git rm --cached gcs-key.json 2>/dev/null || true
-          git add pdfs/
-          git commit -m "📄 PDF $(date +%Y-%m-%d_%H:%M:%S)" || echo "No changes"
+          git add pdfs/ metadata.json
+          git commit -m "📄 Atti scaricati $(date +%Y-%m-%d_%H:%M:%S)" || echo "No changes to commit"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
