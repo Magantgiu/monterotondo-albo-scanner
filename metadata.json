@@ -1143,7 +1143,55 @@
       "pdf_path": "./pdfs/2025/12/2809.pdf",
       "scaricato_il": "2026-01-02T21:56:43.949468",
       "status": "nuovo"
+    },
+    {
+      "id": "6",
+      "data_pubb": "2025-12-29",
+      "oggetto": "Delibera: Consiglio Comunale N.76 DEL 11/12/2025: APPROVAZIONE REGOLAMENTO PER LA GESTIONE E L'UTILIZZO DELLE PALESTRE SCOLASTICHE DI PROPRIETA' DEL COMUNE DI MONTEROTONDO",
+      "pdf_path": "./pdfs/2025/12/6.pdf",
+      "scaricato_il": "2026-01-03T19:03:02.705468",
+      "status": "nuovo"
+    },
+    {
+      "id": "5",
+      "data_pubb": "2025-12-29",
+      "oggetto": "Delibera: Consiglio Comunale N.77 DEL 11/12/2025: MOZIONE PROT. N. 69409 DEL 04/12/2025 GARANZIA DEL DIRITTO ALLO STUDIO E POTENZIAMENTO DEL SERVIZIO OEPAC NEL COMUNE DI MONTEROTONDO. SEDUTA DI CONSIGLIO COMUNALE DEL 11/12/2025",
+      "pdf_path": "./pdfs/2025/12/5.pdf",
+      "scaricato_il": "2026-01-03T19:03:21.561397",
+      "status": "nuovo"
+    },
+    {
+      "id": "4",
+      "data_pubb": "2025-12-29",
+      "oggetto": "Delibera: Consiglio Comunale N.75 DEL 11/12/2025: AGGIORNAMENTO DEGLI ALBI DELLE ASSOCIAZIONI CULTURALI, SPORTIVE E DI VOLONTARIATO SOCIALE DEL COMUNE DI MONTEROTONDO",
+      "pdf_path": "./pdfs/2025/12/4.pdf",
+      "scaricato_il": "2026-01-03T19:03:56.454848",
+      "status": "nuovo"
+    },
+    {
+      "id": "3",
+      "data_pubb": "2025-12-29",
+      "oggetto": "Delibera: Consiglio Comunale N.74 DEL 11/12/2025: APPROVAZIONE REGOLAMENTO DI ORGANIZZAZIONE E FUNZIONAMENTO DELLA BIBLIOTECA COMUNALE POLO CULTURALE TORRE CIVICA",
+      "pdf_path": "./pdfs/2025/12/3.pdf",
+      "scaricato_il": "2026-01-03T19:04:25.641313",
+      "status": "nuovo"
+    },
+    {
+      "id": "2",
+      "data_pubb": "2025-12-29",
+      "oggetto": "Delibera: Consiglio Comunale N.78 DEL 11/12/2025: INTERROGAZIONI SEDUTA DI CONSIGLIO COMUNALE DEL 11/12/2025",
+      "pdf_path": "./pdfs/2025/12/2.pdf",
+      "scaricato_il": "2026-01-03T19:04:50.921453",
+      "status": "nuovo"
+    },
+    {
+      "id": "1",
+      "data_pubb": "2025-12-29",
+      "oggetto": "Delibera: Consiglio Comunale N.73 DEL 11/12/2025: APPROVAZIONE REGOLAMENTO DI ORGANIZZAZIONE E FUNZIONAMENTO DELLA BIBLIOTECA COMUNALE PAOLO ANGELANI E SALA CONFERENZE",
+      "pdf_path": "./pdfs/2025/12/1.pdf",
+      "scaricato_il": "2026-01-03T19:06:46.763420",
+      "status": "nuovo"
     }
   ],
-  "last_date": "2025-12-22"
+  "last_date": "2025-12-29"
 }
