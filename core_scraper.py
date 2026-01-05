@@ -186,6 +186,11 @@ def scarica_da(since: dt.date):
                         try:
                             text = link.text.strip() or ""
                             
+                            # FILTRA: Scarica SOLO file con "(Originale)"
+                            if "(Originale)" not in text:
+                                print(f"    ⏭ Saltato (non è Originale): {text[:50]}")
+                                continue
+                            
                             # Salta .p7m
                             if ".p7m" in text.lower():
                                 continue
