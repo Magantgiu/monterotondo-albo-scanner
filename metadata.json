@@ -1191,7 +1191,15 @@
       "pdf_path": "./pdfs/2025/12/1.pdf",
       "scaricato_il": "2026-01-03T19:06:46.763420",
       "status": "nuovo"
+    },
+    {
+      "id": "7",
+      "data_pubb": "2026-01-07",
+      "oggetto": "ORDINANZA DIRIGENZIALE N.1 DEL 07/01/2026 - SERVIZIO POLIZIA LOCALE: RIMOZIONE INSEGNE LUMINOSE",
+      "pdf_path": "./pdfs/2026/01/7.pdf",
+      "scaricato_il": "2026-01-07T18:51:48.398119",
+      "status": "nuovo"
     }
   ],
-  "last_date": "2025-12-29"
+  "last_date": "2026-01-07"
 }
