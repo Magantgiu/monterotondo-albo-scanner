@@ -1207,7 +1207,15 @@
       "pdf_path": "./pdfs/2026/01/15.pdf",
       "scaricato_il": "2026-01-08T18:48:20.070885",
       "status": "nuovo"
+    },
+    {
+      "id": "16",
+      "data_pubb": "2026-01-09",
+      "oggetto": "ORDINANZA DIRIGENZIALE N.2 DEL 08/01/2026 - SERVIZIO POLIZIA LOCALE: ORDINANZA CDS PIAZZA BERLINGUER, VIA DELLA FONTE, VIA DELL’AERONAUTICA, LARGO MARTIRI DELLE FOIBE GIORNATE ECOLOGICHE APM",
+      "pdf_path": "./pdfs/2026/01/16.pdf",
+      "scaricato_il": "2026-01-09T18:50:08.583775",
+      "status": "nuovo"
     }
   ],
-  "last_date": "2026-01-08"
+  "last_date": "2026-01-09"
 }
