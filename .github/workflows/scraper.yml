@@ -14,12 +14,18 @@ jobs:
         with:
           python-version: "3.11"
       
-      - uses: browser-actions/setup-chrome@v2
-        with:
-          install-chromedriver: true
+      - name: Install latest Google Chrome & system deps
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable fonts-liberation libnss3 libgconf-2-4 libxss1 libasound2
+          sudo mount -o remount,size=1G /dev/shm
       
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install webdriver-manage
       
       - name: Run scraper
         run: python scraper_stateless.py
